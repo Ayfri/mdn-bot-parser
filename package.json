@@ -10,7 +10,7 @@
   "author": "Ayfri",
   "license": "ISC",
   "devDependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "discord.js": "^12.2.0",
     "jsdom": "^16.4.0"
   },
