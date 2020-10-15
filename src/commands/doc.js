@@ -42,6 +42,21 @@ module.exports = class DocCommand extends Command {
 	}
 	
 	/**
+	 * Ajoute l'embed des réactions au message (actuellement une méthode car sinon répétition de code).
+	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
+	 * @returns {void}
+	 */
+	addReactionsField(embed) {
+		embed.addField('Cliquez sur les réactions pour naviguer entre les catégories.', `
+${this.emojis.clipboard} : Informations principales.
+${this.emojis.moreInfos} : Informations supplémentaires.
+${this.emojis.methods} : Méthodes d'instances.
+${this.emojis.properties} : Propriétés d'instances.
+${this.emojis.staticMethods}: Méthodes statiques.
+${this.emojis.staticProperties} : Propriétés statiques.`);
+	}
+	
+	/**
 	 * Change l'embed du message par rapport aux options.
 	 * @param {Object} infos
 	 * @param {MDNEmbedKey} options
@@ -106,27 +121,20 @@ module.exports = class DocCommand extends Command {
 			case 'infos':
 				embed = this.setMainInfos(embed, infos, key.link);
 				break;
-			default:
-				let name;
-				switch (key.type) {
-					case 'methods':
-						name = `${this.emojis.methods} Méthodes`;
-						break;
-					
-					case 'properties':
-						name = `${this.emojis.properties} Propriétés`;
-						break;
-					
-					case 'staticProperties':
-						name = `${this.emojis.staticMethods} Propriétés statiques`;
-						break;
-					
-					case 'staticMethods':
-						name = `${this.emojis.staticProperties} Méthodes statiques`;
-						break;
-				}
-				
-				embed = this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, name);
+			case 'methods':
+				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.methods} Méthodes`);
+				break;
+			
+			case 'properties':
+				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.properties} Propriétés`);
+				break;
+			
+			case 'staticProperties':
+				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.staticMethods} Propriétés statiques`);
+				break;
+			
+			case 'staticMethods':
+				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.staticProperties} Méthodes statiques`);
 				break;
 		}
 		
@@ -422,18 +430,10 @@ module.exports = class DocCommand extends Command {
 				embed.addField(property, this.parseHTMLTagsToMarkdown(object[property]));
 			}
 			
-			if (object.description) {
-				embed.setDescription(this.parseHTMLTagsToMarkdown(object.description));
-			}
+			if (object.description) embed.setDescription(this.parseHTMLTagsToMarkdown(object.description));
+			
+			this.addReactionsField(embed);
 		}
-		
-		embed.setFooter(`
-${this.emojis.clipboard} : Informations principales.
-${this.emojis.moreInfos} : Informations supplémentaires.
-${this.emojis.methods} : Méthodes d'instances.
-${this.emojis.properties} : Propriétés d'instances.
-${this.emojis.staticMethods}: Méthodes statiques.
-${this.emojis.staticProperties} : Propriétés statiques.`);
 		
 		return embed;
 	}
@@ -449,11 +449,11 @@ ${this.emojis.staticProperties} : Propriétés statiques.`);
 		embed.setTitle(`${infos.name.charAt(0) === infos.name.charAt(0).toUpperCase() ? `${this.emojis.classes} Classe` : `${this.emojis.functions} Fonction`} ${infos.name} :`);
 		embed.setURL(link);
 		embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.description)));
-		embed.setFooter('Cliquez sur les réactions pour naviguer entre les catégories.');
 		if (infos.shortDescription) embed.addField('Description courte : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.shortDescription), 1024));
 		if (infos.syntax) embed.addField('Syntaxe : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.syntax), 1024));
 		if (infos.parameters) embed.addField(`${this.emojis.parameter} Paramètres : `, cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.parameters), 1024));
 		if (infos.returnedValue) embed.addField('Valeur de retour : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.returnedValue), 1024));
+		this.addReactionsField(embed);
 		
 		return embed;
 	}
@@ -472,6 +472,7 @@ ${this.emojis.staticProperties} : Propriétés statiques.`);
 			embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.examples)));
 		}
 		if (infos.lookAlso) embed.addField('Voir aussi : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.lookAlso)));
+		this.addReactionsField(embed);
 		
 		return embed;
 	}
