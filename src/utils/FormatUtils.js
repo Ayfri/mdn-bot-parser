@@ -10,7 +10,7 @@ function formatWithRange(text, maxLength) {
 
 /**
  * Ajoute le(s) zéro(s) manquant(s) à un nombre avec une taille maximale cherchée.
- * @param {String|number} number - Le nombre.
+ * @param {string | number} number - Le nombre.
  * @param {number} size - La taille voulue.
  * @returns {string} - Le résultat.
  */
@@ -42,14 +42,15 @@ function addMissingZeros(number, size) {
  */
 function parseDate(pattern, date = new Date(), removeOneDay = false) {
 	let result = pattern;
-	result = result.replace(/y{4}/gi, date.getFullYear().toString())
-	               .replace(/M{2}/g, addMissingZeros(date.getMonth() + 1, 2))
-	               .replace(/[d|j]{2}/gi, addMissingZeros(removeOneDay ? date.getDate() - 1 : date.getDate(), 2))
-	               .replace(/h{2}/gi, addMissingZeros(date.getHours(), 2))
-	               .replace(/m{2}/g, addMissingZeros(date.getMinutes(), 2))
-	               .replace(/s{2}/g, addMissingZeros(date.getSeconds(), 2))
-	               .replace(/S{4}/g, addMissingZeros(date.getMilliseconds(), 2));
-	
+	result = result
+		.replace(/y{4}/gi, date.getFullYear().toString())
+		.replace(/M{2}/g, addMissingZeros(date.getMonth() + 1, 2))
+		.replace(/[d|j]{2}/gi, addMissingZeros(removeOneDay ? date.getDate() - 1 : date.getDate(), 2))
+		.replace(/h{2}/gi, addMissingZeros(date.getHours(), 2))
+		.replace(/m{2}/g, addMissingZeros(date.getMinutes(), 2))
+		.replace(/s{2}/g, addMissingZeros(date.getSeconds(), 2))
+		.replace(/S{4}/g, addMissingZeros(date.getMilliseconds(), 2));
+
 	return result;
 }
 
@@ -95,16 +96,16 @@ function getTime(args) {
 			time.type = 's';
 		}
 	}
-	
+
 	const time = {
 		value: 0,
-		type:  '',
+		type: '',
 	};
-	
+
 	const argsArray = args.toLowerCase().trim().split(/ +/g);
 	const text = typeof args === 'string' ? argsArray[argsArray.length - 1] : args[args.length - 1];
 	setTime(text, time);
-	
+
 	if (time.value === 0) setTime(args[0], time);
 	return time;
 }

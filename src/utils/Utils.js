@@ -32,14 +32,14 @@ function random(array) {
 /**
  * Coupe le texte si il dépasse la {@link length}.
  * @param {string} text - Le texte.
- * @param {Number} [length = 2000] - La longueur du texte max.
+ * @param {number} [length = 2000] - La longueur du texte max.
  * @returns {string} Le texte recoupé.
  */
 function cutTextIfTooLong(text, length = 2000) {
 	if (text.length > length) {
 		text = `${text.substring(0, length - 3)}...`;
 	}
-	
+
 	return text;
 }
 
@@ -51,7 +51,7 @@ function cutTextIfTooLong(text, length = 2000) {
 function toSup(x) {
 	return x
 		.split('')
-		.map(function(c) {
+		.map(function (c) {
 			return c in superscripts ? superscripts[c] : c;
 		})
 		.join('');

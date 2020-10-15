@@ -4,7 +4,7 @@ const fs = require('fs');
 
 module.exports = class EventManager {
 	/**
-	 * @type {module:"discord.js".Collection<String, Event>}
+	 * @type {module:"discord.js".Collection<string, Event>}
 	 */
 	static events = new Collection();
 	client;
@@ -19,7 +19,7 @@ module.exports = class EventManager {
 		Logger.log(`Event ${event.name} successfully bind.`);
 	}
 
-	async loadEvents(dirName) {
+	loadEvents(dirName) {
 		const path = `./${dirName}`;
 		const eventDir = fs.readdirSync(path);
 		Logger.info(`Loading events in '${dirName}' directory.`);

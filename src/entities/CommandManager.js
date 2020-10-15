@@ -6,7 +6,7 @@ const {sep} = require('path');
 module.exports = class CommandManager {
 	/**
 	 * Les commandes
-	 * @type {Collection<String, Command>}
+	 * @type {Collection<string, Command>}
 	 */
 	static commands = new Collection();
 
@@ -34,7 +34,7 @@ module.exports = class CommandManager {
 	 * @param {string} dirName - Le nom du dossier.
 	 * @returns {void}
 	 */
-	async loadCommands(dirName) {
+	loadCommands(dirName) {
 		const path = `./${dirName}`;
 		const commandDir = fs.readdirSync(path);
 		Logger.info(`Searching commands in '${dirName}' directory.`);
@@ -45,9 +45,7 @@ module.exports = class CommandManager {
 					if (command.category === 'none') command.category = dirName.split(sep).pop();
 					this.loadCommand(command);
 				}
-			} else {
-				await this.loadCommands(`${dirName}${sep}${commandFile}`);
-			}
+			} else this.loadCommands(`${dirName}${sep}${commandFile}`);
 		}
 	}
 

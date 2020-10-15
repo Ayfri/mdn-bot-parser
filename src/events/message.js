@@ -15,17 +15,16 @@ module.exports = class MessageEvent extends Event {
 
 	/**
 	 * Execute la commande.
+	 * @param {Command} command - La commande à exécuter.
 	 * @returns {void}
-	 * @private
 	 */
-	executeCommand(command) {
-		command.run(this.client, this.message, this.args);
+	async executeCommand(command) {
+		await command.run(this.client, this.message, this.args);
 	}
 
 	/**
 	 * Récupère le préfixe depuis le message.
 	 * @returns {string | null} - Le préfixe trouvé ou null si aucun préfixe trouvé.
-	 * @private
 	 */
 	getPrefixFromMessage() {
 		let prefix = null;
@@ -55,9 +54,7 @@ module.exports = class MessageEvent extends Event {
 		if (message.author.bot || message.system) return;
 
 		const prefix = this.getPrefixFromMessage() ?? '';
-		this.args = message.content
-			.slice(prefix.length)
-			.split(/\s+/g);
+		this.args = message.content.slice(prefix.length).split(/\s+/g);
 
 		if (prefix) {
 			const command = CommandManager.findCommand(this.args[0] ?? '');
@@ -78,7 +75,7 @@ module.exports = class MessageEvent extends Event {
 					return;
 				}
 
-				this.executeCommand(command);
+				await this.executeCommand(command);
 			}
 		}
 	}

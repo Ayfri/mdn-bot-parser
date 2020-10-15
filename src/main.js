@@ -9,10 +9,10 @@ Logger.error('Starting...', 'Main');
 
 (async () => {
 	Logger.warn('Loading events.', 'Main');
-	await client.eventManager.loadEvents('events');
+	client.eventManager.loadEvents('events');
 
 	Logger.warn('Loading commands.', 'Main');
-	await client.commandManager.loadCommands('commands');
+	client.commandManager.loadCommands('commands');
 
 	await client.login(token);
 })();

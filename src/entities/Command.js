@@ -43,7 +43,7 @@ module.exports = class Command {
 	 * Fonction exécutée quand la commande est exécutée.
 	 * @param {CustomClient} client - Le client.
 	 * @param {module:"discord.js".Message} message - Le message.
-	 * @param {String[]} args - Les arguments.
+	 * @param {string[]} args - Les arguments.
 	 * @returns {void}
 	 */
 	run(client, message, args) {
