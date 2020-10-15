@@ -1,12 +1,15 @@
 const Command = require('../entities/Command.js');
-const {categories, tags} = require('../constants.js');
+const {
+	categories,
+	tags,
+} = require('../constants.js');
 module.exports = class ReloadCommand extends Command {
 	constructor() {
 		super({
-			name    : 'reload',
-			aliases : ['rl'],
+			name:     'reload',
+			aliases:  ['rl'],
 			category: categories.owner,
-			tags    : [tags.owner_only],
+			tags:     [tags.owner_only],
 		});
 	}
 	

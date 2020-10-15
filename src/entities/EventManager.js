@@ -15,6 +15,12 @@ module.exports = class EventManager {
 		this.client = client;
 	}
 	
+	bind(event) {
+		EventManager.events.set(event.name, event);
+		this.client.on(event.name, (...args) => event.run(this.client, ...args));
+		Logger.log(`Event ${event.name} successfully bind.`);
+	}
+	
 	async loadEvents(dirName) {
 		const path = `./${dirName}`;
 		const eventDir = fs.readdirSync(path);
@@ -26,12 +32,6 @@ module.exports = class EventManager {
 				this.bind(event);
 			}
 		}
-	}
-	
-	bind(event) {
-		EventManager.events.set(event.name, event);
-		this.client.on(event.name, (...args) => event.run(this.client, ...args));
-		Logger.log(`Event ${event.name} successfully bind.`);
 	}
 	
 	unbind(event) {

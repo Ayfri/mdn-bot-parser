@@ -4,14 +4,14 @@ const {categories} = require('../constants.js');
 module.exports = class RestartCommand extends Command {
 	constructor() {
 		super({
-			name             : 'restart',
-			aliases          : ['reboot', 'rb'],
+			name:              'restart',
+			aliases:           ['reboot', 'rb'],
 			clientPermissions: [],
-			category         : categories.owner,
-			description      : '',
-			tags             : [],
-			usage            : '',
-			userPermissions  : [],
+			category:          categories.owner,
+			description:       '',
+			tags:              [],
+			usage:             '',
+			userPermissions:   [],
 		});
 	}
 	

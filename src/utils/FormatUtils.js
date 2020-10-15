@@ -108,7 +108,7 @@ function getTime(args) {
 	
 	const time = {
 		value: 0,
-		type : '',
+		type:  '',
 	};
 	
 	const argsArray = args.toLowerCase().trim().split(/ +/g);
@@ -145,5 +145,5 @@ module.exports = {
 	addMissingZeros,
 	formatWithRange,
 	parseRelativeDate,
-	formatByteSize
+	formatByteSize,
 };

@@ -1,3 +1,5 @@
+process.chdir(__dirname);
+
 const {token} = require('../assets/jsons/config.json');
 const CustomClient = require('./entities/Client.js');
 const Logger = require('./utils/Logger.js');

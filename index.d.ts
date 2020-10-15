@@ -1,4 +1,13 @@
-import {Client, ClientEvents, Collection, Message, MessageAdditions, MessageOptions, PermissionResolvable, StringResolvable} from 'discord.js';
+import {
+	Client,
+	ClientEvents,
+	Collection,
+	Message,
+	MessageAdditions,
+	MessageOptions,
+	PermissionResolvable,
+	StringResolvable,
+} from 'discord.js';
 
 
 export class CustomClient extends Client {
@@ -87,7 +96,16 @@ export class Logger {
 
 
 export type LogType = 'debug' | 'log' | 'info' | 'warn' | 'error';
-export type Tag = 'owner_only' | 'guild_only' | 'dm_only' | 'nsfw_only' | 'guild_owner_only' | 'help_command' | 'prefix_command' | 'hidden' | 'wip';
+export type Tag =
+	'owner_only'
+	| 'guild_only'
+	| 'dm_only'
+	| 'nsfw_only'
+	| 'guild_owner_only'
+	| 'help_command'
+	| 'prefix_command'
+	| 'hidden'
+	| 'wip';
 export type Category = 'development' | 'owner' | 'utils';
 
 export interface CommandOptions {

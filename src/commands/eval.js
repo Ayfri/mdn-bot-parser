@@ -5,14 +5,14 @@ const {categories} = require('../constants.js');
 module.exports = class EvalCommand extends Command {
 	constructor() {
 		super({
-			name             : 'eval',
-			aliases          : [],
+			name:              'eval',
+			aliases:           [],
 			clientPermissions: [],
-			category         : categories.owner,
-			description      : '',
-			tags             : [],
-			usage            : '',
-			userPermissions  : [],
+			category:          categories.owner,
+			description:       '',
+			tags:              [],
+			usage:             '',
+			userPermissions:   [],
 		});
 	}
 	
@@ -42,7 +42,13 @@ module.exports = class EvalCommand extends Command {
 		const log = code.includes('$log');
 		
 		
-		let {guild, content, member, author, channel} = message;
+		let {
+			guild,
+			content,
+			member,
+			author,
+			channel,
+		} = message;
 		let members = message.guild?.members;
 		
 		if (code.includes('```')) {
@@ -78,9 +84,9 @@ module.exports = class EvalCommand extends Command {
 			if (log) functionsPassages.push('verifyText');
 			if (debug) channel.send(text);
 			
-			if ( !text) text = 'undefined';
-			if ( !text.toString() && !text.toString().length) text = text.toString();
-			if ( !text.length) return sendJS('EvalError : Cannot send an empty message.');
+			if (!text) text = 'undefined';
+			if (!text.toString() && !text.toString().length) text = text.toString();
+			if (!text.length) return sendJS('EvalError : Cannot send an empty message.');
 			if (text.length > 2048) return sendJS('EvalError : Cannot send much than 2000 characters in one message.');
 		};
 		
@@ -111,7 +117,9 @@ module.exports = class EvalCommand extends Command {
 		const getMember = find => {
 			if (log) functionsPassages.push('getMember');
 			find = find.toLowerCase();
-			return guild.members.get(find) || guild.members.find((m) => m['displayName'].toLowerCase().includes(find) || m['user'].username.toLowerCase().includes(find)) || sendJS('GetError : Nothing found.');
+			return guild.members.get(find) ||
+			       guild.members.find((m) => m['displayName'].toLowerCase().includes(find) || m['user'].username.toLowerCase().includes(find)) ||
+			       sendJS('GetError : Nothing found.');
 		};
 		
 		const getChannel = find => {
@@ -143,8 +151,8 @@ module.exports = class EvalCommand extends Command {
 				let classOfObject = 'void',
 					value = object[key];
 				if (value !== null && value.constructor) classOfObject = value.constructor.name;
-				if ( !['String', 'Boolean', 'void', 'Number', 'Array', 'Message'].includes(classOfObject)) value = typeof value;
-				if ( !value) value = 'undefined';
+				if (!['String', 'Boolean', 'void', 'Number', 'Array', 'Message'].includes(classOfObject)) value = typeof value;
+				if (!value) value = 'undefined';
 				if (value.length === 0) value = '[Object object]';
 				toSend += `${key} = ${value} (${classOfObject})\n`;
 			}
@@ -192,22 +200,7 @@ module.exports = class EvalCommand extends Command {
 		const functions = () => {
 			if (log) functionsPassages.push('functions');
 			const functions = [
-				'cutText',
-				'delMsg',
-				'getChannel',
-				'getFirstCreated',
-				'getFirstJoined',
-				'getMember',
-				'listKeys',
-				'listProps',
-				'sendBig',
-				'sendJS',
-				'sendMarkdown',
-				'sendMp',
-				'sendTo',
-				'sizeOf',
-				'stringify',
-				'verifyText'
+				'cutText', 'delMsg', 'getChannel', 'getFirstCreated', 'getFirstJoined', 'getMember', 'listKeys', 'listProps', 'sendBig', 'sendJS', 'sendMarkdown', 'sendMp', 'sendTo', 'sizeOf', 'stringify', 'verifyText',
 			];
 			return sendJS(functions.sort().join('\n'));
 		};

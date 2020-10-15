@@ -34,6 +34,15 @@ module.exports = class Command {
 	}
 	
 	/**
+	 * Permet de récupérer une commande facilement.
+	 * @param {String} name - Le nom de la commande (ou un de ses alias).
+	 * @returns {Command | null} - La commande.
+	 */
+	getCommand(name) {
+		return CommandManager.findCommand(name ?? '');
+	}
+	
+	/**
 	 * Fonction exécutée quand la commande est exécutée.
 	 * @param {CustomClient} client - Le client.
 	 * @param {module:"discord.js".Message} message - Le message.
@@ -55,14 +64,5 @@ module.exports = class Command {
 	 */
 	async send(content, options) {
 		return await this.message.channel.send(content, options);
-	}
-	
-	/**
-	 * Permet de récupérer une commande facilement.
-	 * @param {String} name - Le nom de la commande (ou un de ses alias).
-	 * @returns {Command | null} - La commande.
-	 */
-	getCommand(name) {
-		return CommandManager.findCommand(name ?? '');
 	}
 };
