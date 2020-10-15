@@ -99,31 +99,35 @@ module.exports = class DocCommand extends Command {
 	async createEmbedFromMDNEmbedKey(key, infos, message) {
 		let embed = new MessageEmbed();
 		
-		if (key.type === 'moreInfos') {
-			embed = this.setMoreInfos(embed, infos, key.link);
-		} else if (key.type === 'infos') {
-			embed = this.setMainInfos(embed, infos, key.link);
-		} else {
-			let name;
-			switch (key.type) {
-				case 'methods':
-					name = `${this.emojis.methods} Méthodes`;
-					break;
+		switch (key.type) {
+			case 'moreInfos':
+				embed = this.setMoreInfos(embed, infos, key.link);
+				break;
+			case 'infos':
+				embed = this.setMainInfos(embed, infos, key.link);
+				break;
+			default:
+				let name;
+				switch (key.type) {
+					case 'methods':
+						name = `${this.emojis.methods} Méthodes`;
+						break;
+					
+					case 'properties':
+						name = `${this.emojis.properties} Propriétés`;
+						break;
+					
+					case 'staticProperties':
+						name = `${this.emojis.staticMethods} Propriétés statiques`;
+						break;
+					
+					case 'staticMethods':
+						name = `${this.emojis.staticProperties} Méthodes statiques`;
+						break;
+				}
 				
-				case 'properties':
-					name = `${this.emojis.properties} Propriétés`;
-					break;
-				
-				case 'staticProperties':
-					name = `${this.emojis.staticMethods} Propriétés statiques`;
-					break;
-				
-				case 'staticMethods':
-					name = `${this.emojis.staticProperties} Méthodes statiques`;
-					break;
-			}
-			
-			embed = this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, name);
+				embed = this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, name);
+				break;
 		}
 		
 		return embed;
@@ -421,6 +425,14 @@ module.exports = class DocCommand extends Command {
 			if (object.description) {
 				embed.setDescription(this.parseHTMLTagsToMarkdown(object.description));
 			}
+			
+			embed.setFooter(`
+${this.emojis.clipboard} : Informations principales.
+${this.emojis.moreInfos} : Informations supplémentaires.
+${this.emojis.methods} : Méthodes d'instances.
+${this.emojis.properties} : Propriétés d'instances.
+${this.emojis.staticMethods}: Méthodes statiques.
+${this.emojis.staticProperties} : Propriétés statiques.`);
 		}
 		
 		return embed;
