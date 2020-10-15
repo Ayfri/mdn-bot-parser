@@ -462,32 +462,3 @@ module.exports = class DocCommand extends Command {
 		return embed;
 	}
 };
-
-const nicknames = {
-	'190853049915408384': 'Si putain',
-	'615878027074600986': 'here',
-	'386893236498857985': 'Léchez-moi le chibre de Provence',
-	'352176756922253321': "L'absentéiste",
-	'609069199536685096': 'Jean-mimi',
-	'383344172712722432': 'Monster (en hibernation)',
-	'147675693902331914': 'You password is Incorrect',
-	'460904946838274098': 'Érythème',
-	'690831638623420438': "T'as changé ma vie Kevin",
-	'301712153327566850': "I'm CapiCode🌴",
-	'576470460481667086': 'everyone',
-	'627207317825257472': 'coin coin',
-	'406558555093729281': 'nyan cat',
-	'686305799483818016': 'Wolf',
-	'280497242714931202': 'yui',
-	'276060004262477825': 'Bug Ambulant',
-	'709815588016357429': 'gomme',
-	'471991012030677003': '<div>Austrian</div>',
-	'532231329950072835': 'antoine du 01',
-	'329624064333447168': 'golem de fer',
-	'216214448203890688': "Goulag d'yfri",
-	'290462006543253505': 'DB-phob',
-	'272676235946098688': 'Lucas',
-	'346967289322799105': 'Eddy',
-	'462632958910529546': 'il aime le Java o_O',
-	'182414082022834176': 'Ahkrin',
-};
