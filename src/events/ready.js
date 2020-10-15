@@ -12,7 +12,7 @@ module.exports = class ReadyEvent extends Event {
 		});
 	}
 
-	async run(client, args) {
+	async run(client) {
 		super.run(client);
 		Logger.log('online !');
 		Logger.debug(`Logged as ${client.user.tag}, ID : ${client.user.id}`);

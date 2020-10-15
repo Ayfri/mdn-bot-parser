@@ -17,7 +17,7 @@ module.exports = class RestartCommand extends Command {
 
 	async run(client, message, args) {
 		super.run(client, message, args);
-		super.send("Relancement du bot. (Ou arrêt du bot si le bot n'est pas sur le vps.)");
+		await super.send("Relancement du bot. (Ou arrêt du bot si le bot n'est pas sur le vps.)");
 		process.exit(0);
 	}
 };

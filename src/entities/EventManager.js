@@ -4,7 +4,6 @@ const fs = require('fs');
 
 module.exports = class EventManager {
 	/**
-	 *
 	 * @type {module:"discord.js".Collection<String, Event>}
 	 */
 	static events = new Collection();

@@ -3,7 +3,7 @@ const {owners} = require('../../assets/jsons/config.json');
 
 /**
  * Indique si l'id l'user est owner.
- * @param {String} userId - Id à tester.
+ * @param {string} userId - Id à tester.
  * @returns {boolean} - Si il est owner.
  */
 function isOwner(userId) {
@@ -12,7 +12,7 @@ function isOwner(userId) {
 
 /**
  * Retourne la clé via la propriété de l'objet.
- * @param {Object} object - L'object.
+ * @param {object} object - L'object.
  * @param {any} value - La valeur.
  * @returns {any} - La clé.
  */
@@ -22,7 +22,7 @@ function getKeyByValue(object, value) {
 
 /**
  * Retourne une valeur aléatoire de l'array mis en argument.
- * @param {Array} array - Un tableau.
+ * @param {array} array - Un tableau.
  * @returns {*} - Une des valeurs random.
  */
 function random(array) {
@@ -31,9 +31,9 @@ function random(array) {
 
 /**
  * Coupe le texte si il dépasse la {@link length}.
- * @param {String} text - Le texte.
+ * @param {string} text - Le texte.
  * @param {Number} [length = 2000] - La longueur du texte max.
- * @returns {String} Le texte recoupé.
+ * @returns {string} Le texte recoupé.
  */
 function cutTextIfTooLong(text, length = 2000) {
 	if (text.length > length) {
@@ -45,7 +45,7 @@ function cutTextIfTooLong(text, length = 2000) {
 
 /**
  * Convertis le texte normal en texte supercscript.
- * @param {String} x - Texte.
+ * @param {string} x - Texte.
  * @returns {string} - Le texte en superscript.
  */
 function toSup(x) {

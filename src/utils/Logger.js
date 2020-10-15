@@ -4,36 +4,36 @@ const {getKeyByValue} = require('../utils/Utils.js');
 
 module.exports = class Logger {
 	/**
-	 *  Log un message de débug (magenta).
+	 * Log un message de débug (magenta).
 	 * @param {any} message - Message à log.
-	 * @param {String} [title = ''] - Titre du log.
+	 * @param {string} [title = ''] - Titre du log.
 	 */
 	static debug(message, title = '') {
 		Logger.process(message, logTypes.debug, title);
 	}
 
 	/**
-	 *  Log un message d'erreur (rouge).
+	 * Log un message d'erreur (rouge).
 	 * @param {any} message - Message à log.
-	 * @param {String} [title = ''] - Titre du log.
+	 * @param {string} [title = ''] - Titre du log.
 	 */
 	static error(message, title = '') {
 		Logger.process(message, logTypes.error, title);
 	}
 
 	/**
-	 *  Log un message d'info (blue).
+	 * Log un message d'info (blue).
 	 * @param {any} message - Message à log.
-	 * @param {String} [title = ''] - Titre du log.
+	 * @param {string} [title = ''] - Titre du log.
 	 */
 	static info(message, title = '') {
 		Logger.process(message, logTypes.info, title);
 	}
 
 	/**
-	 *  Log un message (white).
+	 * Log un message (white).
 	 * @param {any} message - Message à log.
-	 * @param {String} [title = ''] - Titre du log.
+	 * @param {string} [title = ''] - Titre du log.
 	 */
 	static log(message, title = '') {
 		Logger.process(message, logTypes.log, title);
@@ -45,9 +45,9 @@ module.exports = class Logger {
 	 * process("messsage", logsTypes.log, "Titre");
 	 * // logging : [2020-05-22 01:37:40.0151][LOG][Titre] message
 	 *
-	 * @param {String} message - Message à log.
-	 * @param {String} type - Type de log.
-	 * @param {String} [title = ''] - Titre du log.
+	 * @param {string} message - Message à log.
+	 * @param {string} type - Type de log.
+	 * @param {string} [title = ''] - Titre du log.
 	 */
 	static process(message, type, title = '') {
 		function addSquare(string) {
@@ -64,9 +64,9 @@ module.exports = class Logger {
 	}
 
 	/**
-	 *  Log un message de warn (yellow).
+	 * Log un message de warn (yellow).
 	 * @param {any} message - Message à log.
-	 * @param {String} [title = ''] - Titre du log.
+	 * @param {string} [title = ''] - Titre du log.
 	 */
 	static warn(message, title = '') {
 		Logger.process(message, logTypes.warn, title);

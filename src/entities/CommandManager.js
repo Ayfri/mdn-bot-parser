@@ -12,7 +12,7 @@ module.exports = class CommandManager {
 
 	/**
 	 * Cherche une commande via son nom.
-	 * @param {String} name - Le nom de la commande.
+	 * @param {string} name - Le nom de la commande.
 	 * @returns {Command}
 	 */
 	static findCommand(name) {
@@ -30,7 +30,7 @@ module.exports = class CommandManager {
 
 	/**
 	 * Charge toutes les commandes dans le dossier en question.
-	 * @param {String} dirName - Le nom du dossier.
+	 * @param {string} dirName - Le nom du dossier.
 	 */
 	async loadCommands(dirName) {
 		const path = `./${dirName}`;

@@ -60,8 +60,7 @@ module.exports = class MessageEvent extends Event {
 		const prefix = this.getPrefixFromMessage() ?? '';
 		this.args = message.content
 			.slice(prefix.length)
-			.split(/\s+/g)
-			.filter(arg => arg);
+			.split(/\s+/g);
 
 		if (prefix) {
 			const command = CommandManager.findCommand(this.args[0] ?? '');

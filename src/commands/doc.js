@@ -22,7 +22,7 @@ const {inspect} = require('util');
  */
 
 /**
- * @typedef {Object} MDNEmbedKey
+ * @typedef {object} MDNEmbedKey
  * @property {string} link
  * @property {MDNEmbedType} type
  */
@@ -62,7 +62,7 @@ ${this.emojis.return} : Retour en arrière.`);
 	
 	/**
 	 * Change l'embed du message par rapport aux options.
-	 * @param {Object} infos
+	 * @param {object} infos
 	 * @param {MDNEmbedKey} options
 	 * @param {Message} message
 	 * @returns {Promise<void>}
@@ -86,7 +86,7 @@ ${this.emojis.return} : Retour en arrière.`);
 	 * @param {Message} mainMessage - Main message sent by user.
 	 * @param {module:"discord.js".Client} client - Discord client.
 	 * @param {string} link - The link of the object from documentation.
-	 * @param {Object} infos - The informations collected from the website.
+	 * @param {object} infos - The informations collected from the website.
 	 * @returns {Promise<void>}
 	 */
 	async createCollector(commandMessage, mainMessage, client, link, infos) {
@@ -111,7 +111,7 @@ ${this.emojis.return} : Retour en arrière.`);
 	/**
 	 * Créé un embed en rapport avec la clé.
 	 * @param {MDNEmbedKey} key
-	 * @param {Object} infos
+	 * @param {object} infos
 	 * @param {Message} message
 	 * @returns {Promise<module:"discord.js".MessageEmbed|*>}
 	 */
@@ -196,7 +196,7 @@ ${this.emojis.return} : Retour en arrière.`);
 	/**
 	 * Remplace une liste HTML par un objet contenant [nom : valeur].
 	 * @param {HTMLUListElement} list - Le HTML.
-	 * @returns {Object} - L'objet.
+	 * @returns {object} - L'objet.
 	 * @private
 	 */
 	parseHTMLList(list) {
@@ -232,7 +232,7 @@ ${this.emojis.return} : Retour en arrière.`);
 	
 	/**
 	 * Remplace les tags HTML de formats pour les renvoyer en markdown Discord.
-	 * @param {String} text - Le HTML.
+	 * @param {string} text - Le HTML.
 	 * @returns {string} - Le texte reformatté.
 	 * @private
 	 */
@@ -280,7 +280,7 @@ ${this.emojis.return} : Retour en arrière.`);
 	/**
 	 * Remplace une liste de paramètres par du texte.
 	 * @param {HTMLUListElement} list - Le HTML.
-	 * @returns {String} - Le texte.
+	 * @returns {string} - Le texte.
 	 * @private
 	 */
 	parseParameters(list) {
@@ -374,7 +374,7 @@ ${this.emojis.return} : Retour en arrière.`);
 	 * @returns {void}
 	 */
 	async run(client, message, args) {
-		await super.run(client, message, args);
+		super.run(client, message, args);
 		
 		this.emojis = {
 			classes:          client.emojis.cache.get('742675256996659250'),
@@ -418,10 +418,10 @@ ${this.emojis.return} : Retour en arrière.`);
 	
 	/**
 	 * Transforme une liste de fields dans un objet en un embed propre.
-	 * @param {Object} object - La Liste de fields.
+	 * @param {object} object - La Liste de fields.
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
-	 * @param {String} link - Le lien de l'objet.
-	 * @param {String} name - Le nom des fields.
+	 * @param {string} link - Le lien de l'objet.
+	 * @param {string} name - Le nom des fields.
 	 * @retuns {void}
 	 * @private
 	 */
@@ -447,8 +447,8 @@ ${this.emojis.return} : Retour en arrière.`);
 	/**
 	 * Sets the informations for the main embed.
 	 * @param {module:"discord.js".MessageEmbed} embed
-	 * @param {Object} infos
-	 * @param {String} link
+	 * @param {object} infos
+	 * @param {string} link
 	 * @returns {MessageEmbed}
 	 */
 	setMainInfos(embed, infos, link) {
@@ -467,8 +467,8 @@ ${this.emojis.return} : Retour en arrière.`);
 	/**
 	 * Sets the informations for the moreInfos embed.
 	 * @param {module:"discord.js".MessageEmbed} embed
-	 * @param {Object} infos
-	 * @param {String} link
+	 * @param {object} infos
+	 * @param {string} link
 	 * @returns {MessageEmbed}
 	 */
 	setMoreInfos(embed, infos, link) {

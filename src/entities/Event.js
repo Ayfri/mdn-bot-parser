@@ -1,8 +1,5 @@
 const Logger = require('../utils/Logger.js');
 
-/**
- * @module Gali/Event
- */
 module.exports = class Event {
 	name;
 	once = false;
@@ -23,7 +20,7 @@ module.exports = class Event {
 	 * @param {any} [args] - Les arguments.
 	 * @returns {void}
 	 */
-	async run(client, ...args) {
+	run(client, ...args) {
 		this.client = client;
 	}
 };

@@ -1,9 +1,6 @@
 const CommandManager = require('./CommandManager.js');
 const Logger = require('../utils/Logger.js');
 
-/**
- * @type Command
- */
 module.exports = class Command {
 	aliases = [];
 	category = 'none';
@@ -35,7 +32,7 @@ module.exports = class Command {
 
 	/**
 	 * Permet de récupérer une commande facilement.
-	 * @param {String} name - Le nom de la commande (ou un de ses alias).
+	 * @param {string} name - Le nom de la commande (ou un de ses alias).
 	 * @returns {Command | null} - La commande.
 	 */
 	getCommand(name) {
@@ -49,7 +46,7 @@ module.exports = class Command {
 	 * @param {String[]} args - Les arguments.
 	 * @returns {void}
 	 */
-	async run(client, message, args) {
+	run(client, message, args) {
 		this.client = client;
 		this.message = message;
 		this.args = args;
