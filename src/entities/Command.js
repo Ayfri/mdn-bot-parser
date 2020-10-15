@@ -13,11 +13,11 @@ module.exports = class Command {
 	tags = [];
 	usage = '';
 	userPermissions = [];
-	
+
 	message;
 	client;
 	args = [];
-	
+
 	/**
 	 * Créé une nouvelle commande.
 	 * @param {CommandOptions} options - Les options de la commande.
@@ -32,7 +32,7 @@ module.exports = class Command {
 		this.usage = options?.usage;
 		this.userPermissions = options?.userPermissions;
 	}
-	
+
 	/**
 	 * Permet de récupérer une commande facilement.
 	 * @param {String} name - Le nom de la commande (ou un de ses alias).
@@ -41,7 +41,7 @@ module.exports = class Command {
 	getCommand(name) {
 		return CommandManager.findCommand(name ?? '');
 	}
-	
+
 	/**
 	 * Fonction exécutée quand la commande est exécutée.
 	 * @param {CustomClient} client - Le client.
@@ -55,7 +55,7 @@ module.exports = class Command {
 		this.args = args;
 		Logger.log(`Command '${this.name}' executed by '${message.author.tag}'.`);
 	}
-	
+
 	/**
 	 * Envoie un message.
 	 * @param {StringResolvable|APIMessage} [content=''] - Le contenu à envoyer.

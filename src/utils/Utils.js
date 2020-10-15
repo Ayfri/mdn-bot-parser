@@ -39,10 +39,9 @@ function cutTextIfTooLong(text, length = 2000) {
 	if (text.length > length) {
 		text = `${text.substring(0, length - 3)}...`;
 	}
-	
+
 	return text;
 }
-
 
 /**
  * Convertis le texte normal en texte supercscript.
@@ -50,11 +49,13 @@ function cutTextIfTooLong(text, length = 2000) {
  * @returns {string} - Le texte en superscript.
  */
 function toSup(x) {
-	return x.split('').map(function (c) {
-		return c in superscripts ? superscripts[c] : c;
-	}).join('');
+	return x
+		.split('')
+		.map(function (c) {
+			return c in superscripts ? superscripts[c] : c;
+		})
+		.join('');
 }
-
 
 module.exports = {
 	getKeyByValue,

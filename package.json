@@ -18,6 +18,7 @@
 	"prettier": {
 		"arrowParens": "avoid",
 		"bracketSpacing": false,
+		"endOfLine": "lf",
 		"printWidth": 200,
 		"quoteProps": "consistent",
 		"semi": true,

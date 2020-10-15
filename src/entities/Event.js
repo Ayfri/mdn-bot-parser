@@ -7,7 +7,7 @@ module.exports = class Event {
 	name;
 	once = false;
 	client;
-	
+
 	/**
 	 * Créé un nouvel évent.
 	 * @param {EventOptions} options - Options de l'évent.
@@ -16,7 +16,7 @@ module.exports = class Event {
 		this.name = options?.name;
 		this.once = options?.once;
 	}
-	
+
 	/**
 	 * Execute l'évent.
 	 * @param {CustomClient} client - Le client.

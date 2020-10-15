@@ -45,7 +45,7 @@ function parseDate(pattern, date = new Date(), removeOneDay = false) {
 	result = result.replace(/m{2}/g, addMissingZeros(date.getMinutes(), 2));
 	result = result.replace(/s{2}/g, addMissingZeros(date.getSeconds(), 2));
 	result = result.replace(/S{4}/g, addMissingZeros(date.getMilliseconds(), 2));
-	
+
 	return result;
 }
 
@@ -86,7 +86,6 @@ function addMissingZeros(number, size) {
  * @returns {{type: string, value: number}} - Retourne un objet contenant le type de temps et le nombre de millisecondes.
  */
 function getTime(args) {
-	
 	function setTime(text, time) {
 		if (['d', 'j', 'jour', 'jours'].some(s => text.endsWith(s))) {
 			time.value = 1000 * 60 * 60 * 24 * parseInt(text.slice(0, text.length - 1));
@@ -94,32 +93,28 @@ function getTime(args) {
 		} else if (['h', 'heure', 'heures', 'hour', 'hours'].some(s => text.endsWith(s))) {
 			time.value = 1000 * 60 * 60 * parseInt(text.slice(0, text.length - 1));
 			time.type = 'h';
-			
 		} else if (['m', 'minute', 'minutes'].some(s => text.endsWith(s))) {
 			time.value = 1000 * 60 * parseInt(text.slice(0, text.length - 1));
 			time.type = 'm';
-			
 		} else if (['s', 'seconde', 'secondes', 'second', 'seconds'].some(s => text.endsWith(s))) {
 			time.value = 1000 * parseInt(text.slice(0, text.length - 1));
 			time.type = 's';
 		}
-		
 	}
-	
+
 	const time = {
 		value: 0,
-		type:  '',
+		type: '',
 	};
-	
+
 	const argsArray = args.toLowerCase().trim().split(/ +/g);
 	const text = typeof args === 'string' ? argsArray[argsArray.length - 1] : args[args.length - 1];
 	setTime(text, time);
-	
+
 	if (time.value === 0) {
 		setTime(args[0], time);
 	}
 	return time;
-	
 }
 
 /**

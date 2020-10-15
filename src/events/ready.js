@@ -11,7 +11,7 @@ module.exports = class ReadyEvent extends Event {
 			once: true,
 		});
 	}
-	
+
 	async run(client, args) {
 		super.run(client);
 		Logger.log('online !');

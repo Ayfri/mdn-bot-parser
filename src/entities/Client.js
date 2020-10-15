@@ -11,7 +11,7 @@ module.exports = class CustomClient extends Client {
 	eventManager;
 	commands;
 	events;
-	
+
 	constructor() {
 		super();
 		this.eventManager = new EventManager(this);

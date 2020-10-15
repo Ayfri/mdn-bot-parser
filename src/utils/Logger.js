@@ -2,7 +2,6 @@ const {parseDate} = require('../utils/FormatUtils.js');
 const {logTypes} = require('../constants.js');
 const {getKeyByValue} = require('../utils/Utils.js');
 
-
 module.exports = class Logger {
 	/**
 	 *  Log un message de débug (magenta).
@@ -12,7 +11,7 @@ module.exports = class Logger {
 	static debug(message, title = '') {
 		Logger.process(message, logTypes.debug, title);
 	}
-	
+
 	/**
 	 *  Log un message d'erreur (rouge).
 	 * @param {any} message - Message à log.
@@ -21,7 +20,7 @@ module.exports = class Logger {
 	static error(message, title = '') {
 		Logger.process(message, logTypes.error, title);
 	}
-	
+
 	/**
 	 *  Log un message d'info (blue).
 	 * @param {any} message - Message à log.
@@ -30,7 +29,7 @@ module.exports = class Logger {
 	static info(message, title = '') {
 		Logger.process(message, logTypes.info, title);
 	}
-	
+
 	/**
 	 *  Log un message (white).
 	 * @param {any} message - Message à log.
@@ -39,7 +38,7 @@ module.exports = class Logger {
 	static log(message, title = '') {
 		Logger.process(message, logTypes.log, title);
 	}
-	
+
 	/**
 	 * Process le message pour le log suivant les arguments.
 	 * @example
@@ -54,16 +53,16 @@ module.exports = class Logger {
 		function addSquare(string) {
 			return `[${string}]`;
 		}
-		
+
 		let result = `\x1b[${type}m${parseDate('[yyyy-MM-jj hh:mm:ss.SSSS]')}${addSquare(getKeyByValue(logTypes, type).toUpperCase())}`;
 		if (title) {
 			result += addSquare(title);
 		}
 		result += ` ${String(message)}`;
-		
+
 		console.log(result);
 	}
-	
+
 	/**
 	 *  Log un message de warn (yellow).
 	 * @param {any} message - Message à log.

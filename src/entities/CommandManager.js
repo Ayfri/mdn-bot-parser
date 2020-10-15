@@ -9,7 +9,7 @@ module.exports = class CommandManager {
 	 * @type {Collection<String, Command>}
 	 */
 	static commands = new Collection();
-	
+
 	/**
 	 * Cherche une commande via son nom.
 	 * @param {String} name - Le nom de la commande.
@@ -18,7 +18,7 @@ module.exports = class CommandManager {
 	static findCommand(name) {
 		return CommandManager.commands.find(command => command.name.toLowerCase() === name.toLowerCase() || command.aliases?.includes(name.toLowerCase()));
 	}
-	
+
 	/**
 	 * Charge une commande.
 	 * @param {Command} command
@@ -27,7 +27,7 @@ module.exports = class CommandManager {
 		CommandManager.commands.set(command.name, command);
 		Logger.log(`Command '${command.name}' loaded successfully.`);
 	}
-	
+
 	/**
 	 * Charge toutes les commandes dans le dossier en question.
 	 * @param {String} dirName - Le nom du dossier.
@@ -48,7 +48,7 @@ module.exports = class CommandManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * Décharge une commande.
 	 * @param {Command} command

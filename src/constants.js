@@ -1,27 +1,27 @@
 const logTypes = {
 	debug: '35',
-	log:   '37',
-	info:  '34',
-	warn:  '33',
+	log: '37',
+	info: '34',
+	warn: '33',
 	error: '31',
 };
 
 const tags = {
-	owner_only:       'Seulement disponible aux gérants du bot.',
-	guild_only:       'Seulement disponible sur serveur.',
-	dm_only:          'Seulement disponible en messages privés.',
-	nsfw_only:        'Seulement disponible dans un salon NSFW.',
+	owner_only: 'Seulement disponible aux gérants du bot.',
+	guild_only: 'Seulement disponible sur serveur.',
+	dm_only: 'Seulement disponible en messages privés.',
+	nsfw_only: 'Seulement disponible dans un salon NSFW.',
 	guild_owner_only: 'Seulement disponible pour le propriétaire du serveur.',
-	help_command:     'Commande d\'aide.',
-	prefix_command:   'Commande des préfixes.',
-	hidden:           'Cachée.',
-	wip:              'Non finie (potentiellement instable).',
+	help_command: "Commande d'aide.",
+	prefix_command: 'Commande des préfixes.',
+	hidden: 'Cachée.',
+	wip: 'Non finie (potentiellement instable).',
 };
 
 const categories = {
 	development: 'Développement',
-	owner:       'Privé',
-	utils:       'Utilitaires',
+	owner: 'Privé',
+	utils: 'Utilitaires',
 };
 
 const superscripts = {
