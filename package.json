@@ -1,5 +1,8 @@
 {
 	"author": "Ayfri",
+	"devDependencies": {
+		"prettier": "^2.1.2"
+	},
 	"dependencies": {
 		"axios": "^0.20.0",
 		"discord.js": "^12.3.1",
@@ -8,13 +11,25 @@
 	"engines": {
 		"node": ">=14"
 	},
-	"private": true,
 	"keywords": [],
 	"license": "ISC",
 	"main": "src/main.js",
 	"name": "mdn-parser",
+	"prettier": {
+		"arrowParens": "avoid",
+		"bracketSpacing": false,
+		"printWidth": 200,
+		"quoteProps": "consistent",
+		"semi": true,
+		"singleQuote": true,
+		"tabWidth": 4,
+		"trailingComma": "es5",
+		"useTabs": true
+	},
+	"private": true,
 	"scripts": {
-		"run": "node src/main.js"
+		"run": "node src/main.js",
+		"prettier": "prettier --write ./ package.json index.d.ts README.md"
 	},
 	"typings": "index.d.ts",
 	"version": "1.0.0"
