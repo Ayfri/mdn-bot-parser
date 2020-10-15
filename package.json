@@ -1,20 +1,21 @@
 {
-	"name": "mdn-parser",
-	"version": "1.0.0",
-	"shortDescription": "",
-	"main": "src/main.js",
-	"scripts": {
-		"run": "node src/main.js"
-	},
-	"keywords": [],
 	"author": "Ayfri",
-	"license": "ISC",
-	"devDependencies": {
-		"typescript": "4.0.3"
-	},
 	"dependencies": {
 		"axios": "^0.20.0",
 		"discord.js": "^12.3.1",
 		"jsdom": "^16.4.0"
-	}
+	},
+	"engines": {
+		"node": ">=14"
+	},
+	"private": true,
+	"keywords": [],
+	"license": "ISC",
+	"main": "src/main.js",
+	"name": "mdn-parser",
+	"scripts": {
+		"run": "node src/main.js"
+	},
+	"typings": "index.d.ts",
+	"version": "1.0.0"
 }
