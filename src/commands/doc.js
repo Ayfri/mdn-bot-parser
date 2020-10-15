@@ -1,3 +1,4 @@
+const Logger = require('../utils/Logger.js');
 const Command = require('../entities/Command.js');
 const {
 	categories,
@@ -13,6 +14,8 @@ const {
 	MessageEmbed,
 	Collection,
 } = require('discord.js');
+
+const {inspect} = require('util');
 
 /**
  * @typedef {'infos'|'moreInfos'|'methods'|'properties'|'staticMethods'|'staticProperties'} MDNEmbedType
@@ -47,13 +50,14 @@ module.exports = class DocCommand extends Command {
 	 * @returns {void}
 	 */
 	addReactionsField(embed) {
-		embed.addField('Cliquez sur les réactions pour naviguer entre les catégories.', `
+		embed.addField('Cliquez sur les réactions pour naviguer entre les catégories :', `
 ${this.emojis.clipboard} : Informations principales.
 ${this.emojis.moreInfos} : Informations supplémentaires.
 ${this.emojis.methods} : Méthodes d'instances.
 ${this.emojis.properties} : Propriétés d'instances.
 ${this.emojis.staticMethods}: Méthodes statiques.
-${this.emojis.staticProperties} : Propriétés statiques.`);
+${this.emojis.staticProperties} : Propriétés statiques.
+${this.emojis.return} : Retour en arrière.`);
 	}
 	
 	/**
@@ -118,9 +122,11 @@ ${this.emojis.staticProperties} : Propriétés statiques.`);
 			case 'moreInfos':
 				embed = this.setMoreInfos(embed, infos, key.link);
 				break;
+			
 			case 'infos':
 				embed = this.setMainInfos(embed, infos, key.link);
 				break;
+			
 			case 'methods':
 				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.methods} Méthodes`);
 				break;
@@ -398,13 +404,12 @@ ${this.emojis.staticProperties} : Propriétés statiques.`);
 		}, infos, message);
 		
 		const mainMessage = await super.send(mainEmbed);
-		
 		await mainMessage.react(this.emojis.clipboard);
 		await mainMessage.react(this.emojis.moreInfos);
-		await mainMessage.react(this.emojis.methods);
-		await mainMessage.react(this.emojis.properties);
-		await mainMessage.react(this.emojis.staticMethods);
-		await mainMessage.react(this.emojis.staticProperties);
+		if (JSON.stringify(infos.methods).slice(1, -1).length > 0) await mainMessage.react(this.emojis.methods);
+		if (JSON.stringify(infos.properties).slice(1, -1).length > 0) await mainMessage.react(this.emojis.properties);
+		if (JSON.stringify(infos.staticProperties).slice(1, -1).length > 0) await mainMessage.react(this.emojis.staticProperties);
+		if (JSON.stringify(infos.staticMethods).slice(1, -1).length > 0) await mainMessage.react(this.emojis.staticMethods);
 		await mainMessage.react(this.emojis.return);
 		
 		await this.createCollector(message, mainMessage, client, link, infos);
