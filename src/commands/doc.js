@@ -1,4 +1,3 @@
-const Logger = require('../utils/Logger.js');
 const Command = require('../entities/Command.js');
 const {
 	categories,
@@ -15,7 +14,6 @@ const {
 	Collection,
 } = require('discord.js');
 
-const {inspect} = require('util');
 
 /**
  * @typedef {'infos'|'moreInfos'|'methods'|'properties'|'staticMethods'|'staticProperties'} MDNEmbedType
@@ -110,10 +108,10 @@ ${this.emojis.return} : Retour en arrière.`);
 	
 	/**
 	 * Créé un embed en rapport avec la clé.
-	 * @param {MDNEmbedKey} key
-	 * @param {object} infos
-	 * @param {Message} message
-	 * @returns {Promise<module:"discord.js".MessageEmbed|*>}
+	 * @param {MDNEmbedKey} key - La clé.
+	 * @param {object} infos - Les informations.
+	 * @param {Message} message - Le message.
+	 * @returns {Promise<module:"discord.js".MessageEmbed|*>} - L'embed.
 	 */
 	async createEmbedFromMDNEmbedKey(key, infos, message) {
 		let embed = new MessageEmbed();
@@ -149,9 +147,9 @@ ${this.emojis.return} : Retour en arrière.`);
 	
 	/**
 	 * Get the website DOM (or an error).
-	 * @param {string} link
-	 * @param {Message} message
-	 * @returns {Promise<{website: *, error: *}>}
+	 * @param {string} link - Le lien du site.
+	 * @param {Message} message - Le message.
+	 * @returns {Promise<{website: *, error: *}>} - Le résultat (site ou erreur).
 	 */
 	async getSite(link, message) {
 		let website;
@@ -171,8 +169,8 @@ ${this.emojis.return} : Retour en arrière.`);
 	}
 	
 	/**
-	 * Generate new informations for parsing MDN.
-	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: [], examples: string, name: string, staticMethods: {}, lookAlso: [], syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}}
+	 * Génère de nouvelles informations pour analyser un site MDN.
+	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: [], examples: string, name: string, staticMethods: {}, lookAlso: [], syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}} - Les informations.
 	 */
 	newInfos() {
 		return {
@@ -197,7 +195,6 @@ ${this.emojis.return} : Retour en arrière.`);
 	 * Remplace une liste HTML par un objet contenant [nom : valeur].
 	 * @param {HTMLUListElement} list - Le HTML.
 	 * @returns {object} - L'objet.
-	 * @private
 	 */
 	parseHTMLList(list) {
 		let result = {};
@@ -234,7 +231,6 @@ ${this.emojis.return} : Retour en arrière.`);
 	 * Remplace les tags HTML de formats pour les renvoyer en markdown Discord.
 	 * @param {string} text - Le HTML.
 	 * @returns {string} - Le texte reformatté.
-	 * @private
 	 */
 	parseHTMLTagsToMarkdown(text = '') {
 		if (!text) text = '';
@@ -281,7 +277,6 @@ ${this.emojis.return} : Retour en arrière.`);
 	 * Remplace une liste de paramètres par du texte.
 	 * @param {HTMLUListElement} list - Le HTML.
 	 * @returns {string} - Le texte.
-	 * @private
 	 */
 	parseParameters(list) {
 		let result = '';
@@ -306,9 +301,9 @@ ${this.emojis.return} : Retour en arrière.`);
 	}
 	
 	/**
-	 * Returns informations for parsing a dom.
-	 * @param {any} dom
-	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: *[], examples: string, name: string, staticMethods: {}, lookAlso: *[], syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}}
+	 * Retourne les informations du dom en le parsant.
+	 * @param {any} dom - Le DOM.
+	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: *[], examples: string, name: string, staticMethods: {}, lookAlso: *[], syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}} - Les informations.
 	 */
 	parseWebsiteInfos(dom) {
 		const infos = this.newInfos();
@@ -366,13 +361,6 @@ ${this.emojis.return} : Retour en arrière.`);
 		return infos;
 	}
 	
-	/**
-	 *
-	 * @param client
-	 * @param message
-	 * @param {String[]} args
-	 * @returns {void}
-	 */
 	async run(client, message, args) {
 		super.run(client, message, args);
 		
@@ -423,7 +411,6 @@ ${this.emojis.return} : Retour en arrière.`);
 	 * @param {string} link - Le lien de l'objet.
 	 * @param {string} name - Le nom des fields.
 	 * @retuns {void}
-	 * @private
 	 */
 	setEmbedFromFieldsCategory(object, embed, link, name) {
 		if (Object.keys(object).length > 0) {
@@ -445,11 +432,11 @@ ${this.emojis.return} : Retour en arrière.`);
 	}
 	
 	/**
-	 * Sets the informations for the main embed.
-	 * @param {module:"discord.js".MessageEmbed} embed
-	 * @param {object} infos
-	 * @param {string} link
-	 * @returns {MessageEmbed}
+	 * Définit les informations de l'embed principal.
+	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
+	 * @param {object} infos - Les informations.
+	 * @param {string} link - Le lien.
+	 * @returns {MessageEmbed} - L'embed modifié.
 	 */
 	setMainInfos(embed, infos, link) {
 		embed.setTitle(`${infos.name.charAt(0) === infos.name.charAt(0).toUpperCase() ? `${this.emojis.classes} Classe` : `${this.emojis.functions} Fonction`} ${infos.name} :`);
@@ -466,10 +453,10 @@ ${this.emojis.return} : Retour en arrière.`);
 	
 	/**
 	 * Sets the informations for the moreInfos embed.
-	 * @param {module:"discord.js".MessageEmbed} embed
-	 * @param {object} infos
-	 * @param {string} link
-	 * @returns {MessageEmbed}
+	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
+	 * @param {object} infos - Les informations.
+	 * @param {string} link - Le lien.
+	 * @returns {MessageEmbed} - L'embed modifié.
 	 */
 	setMoreInfos(embed, infos, link) {
 		embed.setTitle(`${this.emojis.moreInfos} Informations supplémentaires : `);

@@ -13,7 +13,7 @@ module.exports = class CommandManager {
 	/**
 	 * Cherche une commande via son nom.
 	 * @param {string} name - Le nom de la commande.
-	 * @returns {Command}
+	 * @returns {Command} - La commande trouvée.
 	 */
 	static findCommand(name) {
 		return CommandManager.commands.find(command => command.name.toLowerCase() === name.toLowerCase() || command.aliases?.includes(name.toLowerCase()));
@@ -21,7 +21,8 @@ module.exports = class CommandManager {
 
 	/**
 	 * Charge une commande.
-	 * @param {Command} command
+	 * @param {Command} command - La commande à charger.
+	 * @returns {void}
 	 */
 	loadCommand(command) {
 		CommandManager.commands.set(command.name, command);
@@ -31,6 +32,7 @@ module.exports = class CommandManager {
 	/**
 	 * Charge toutes les commandes dans le dossier en question.
 	 * @param {string} dirName - Le nom du dossier.
+	 * @returns {void}
 	 */
 	async loadCommands(dirName) {
 		const path = `./${dirName}`;
@@ -51,7 +53,8 @@ module.exports = class CommandManager {
 
 	/**
 	 * Décharge une commande.
-	 * @param {Command} command
+	 * @param {Command} command - La commande à décharger.
+	 * @returns {void}
 	 */
 	unloadCommand(command) {
 		CommandManager.commands.delete(command.name);

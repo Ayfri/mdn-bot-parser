@@ -55,9 +55,7 @@ module.exports = class Logger {
 		}
 
 		let result = `\x1b[${type}m${parseDate('[yyyy-MM-jj hh:mm:ss.SSSS]')}${addSquare(getKeyByValue(logTypes, type).toUpperCase())}`;
-		if (title) {
-			result += addSquare(title);
-		}
+		if (title) result += addSquare(title);
 		result += ` ${String(message)}`;
 
 		console.log(result);

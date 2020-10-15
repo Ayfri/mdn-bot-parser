@@ -1,9 +1,6 @@
 const Logger = require('../utils/Logger.js');
 const Event = require('../entities/Event.js');
 
-/**
- * @extends {Event}
- */
 module.exports = class ReadyEvent extends Event {
 	constructor() {
 		super({

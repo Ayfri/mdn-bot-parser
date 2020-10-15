@@ -39,7 +39,7 @@ function cutTextIfTooLong(text, length = 2000) {
 	if (text.length > length) {
 		text = `${text.substring(0, length - 3)}...`;
 	}
-
+	
 	return text;
 }
 
@@ -51,7 +51,7 @@ function cutTextIfTooLong(text, length = 2000) {
 function toSup(x) {
 	return x
 		.split('')
-		.map(function (c) {
+		.map(function(c) {
 			return c in superscripts ? superscripts[c] : c;
 		})
 		.join('');

@@ -4,9 +4,6 @@ const {isOwner} = require('../utils/Utils.js');
 const {tags} = require('../constants.js');
 const {prefixes} = require('../../assets/jsons/config.json');
 
-/**
- * @extends {Event}
- */
 module.exports = class MessageEvent extends Event {
 	message;
 

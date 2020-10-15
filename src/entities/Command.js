@@ -57,7 +57,7 @@ module.exports = class Command {
 	 * Envoie un message.
 	 * @param {StringResolvable|APIMessage} [content=''] - Le contenu à envoyer.
 	 * @param {MessageOptions|MessageAdditions} [options={}] - Les options à fournir.
-	 * @returns {Promise<Message>|Message}
+	 * @returns {Promise<Message>|Message} - Le message.
 	 */
 	async send(content, options) {
 		return await this.message.channel.send(content, options);

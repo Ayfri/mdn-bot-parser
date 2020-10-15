@@ -9,6 +9,16 @@ function formatWithRange(text, maxLength) {
 }
 
 /**
+ * Ajoute le(s) zéro(s) manquant(s) à un nombre avec une taille maximale cherchée.
+ * @param {String|number} number - Le nombre.
+ * @param {number} size - La taille voulue.
+ * @returns {string} - Le résultat.
+ */
+function addMissingZeros(number, size) {
+	return number.toString().length < size ? '0'.repeat(size - number.toString().length) + number : number;
+}
+
+/**
  * Formatte le pattern pour pouvoir ajouter des éléments d'une date, un peu comme moments mais ne fonctionne qu'avec :
  *
  *  • Année (yyyy)
@@ -57,16 +67,6 @@ function parseRelativeDate(pattern, relativeDate = new Date()) {
 }
 
 /**
- * Ajoute le(s) zéro(s) manquant(s) à un nombre avec une taille maximale cherchée.
- * @param {String|number} number - Le nombre.
- * @param {number} size - La taille voulue.
- * @returns {string} - Le résultat.
- */
-function addMissingZeros(number, size) {
-	return number.toString().length < size ? '0'.repeat(size - number.toString().length) + number : number;
-}
-
-/**
  * Utile pour la commande "remind" par exemple.
  * @example
  * const result = getTime("Je veux attendre 5h");
@@ -105,9 +105,7 @@ function getTime(args) {
 	const text = typeof args === 'string' ? argsArray[argsArray.length - 1] : args[args.length - 1];
 	setTime(text, time);
 	
-	if (time.value === 0) {
-		setTime(args[0], time);
-	}
+	if (time.value === 0) setTime(args[0], time);
 	return time;
 }
 
@@ -117,15 +115,7 @@ function getTime(args) {
  * @returns {string} - Le résultat.
  */
 function formatByteSize(bytes) {
-	if (bytes < 1000) {
-		return `${bytes} octets`;
-	} else if (bytes < 1000000) {
-		return `${(bytes / 1000).toFixed(3)} KB`;
-	} else if (bytes < 1000000000) {
-		return `${(bytes / 1000000).toFixed(3)} MB`;
-	} else {
-		return `${(bytes / 1000000000).toFixed(3)} GB`;
-	}
+	return bytes < 1000 ? `${bytes} octets` : bytes < 1000000 ? `${(bytes / 1000).toFixed(3)} KB` : bytes < 1000000000 ? `${(bytes / 1000000).toFixed(3)} MB` : `${(bytes / 1000000000).toFixed(3)} GB`;
 }
 
 module.exports = {
