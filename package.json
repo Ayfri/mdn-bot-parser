@@ -29,7 +29,7 @@
 	},
 	"private": true,
 	"scripts": {
-		"run": "node src/main.js",
+		"start": "node src/main.js",
 		"prettier": "prettier --write ./ package.json index.d.ts README.md"
 	},
 	"typings": "index.d.ts",
