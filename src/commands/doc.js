@@ -425,15 +425,15 @@ module.exports = class DocCommand extends Command {
 			if (object.description) {
 				embed.setDescription(this.parseHTMLTagsToMarkdown(object.description));
 			}
-			
-			embed.setFooter(`
+		}
+		
+		embed.setFooter(`
 ${this.emojis.clipboard} : Informations principales.
 ${this.emojis.moreInfos} : Informations supplémentaires.
 ${this.emojis.methods} : Méthodes d'instances.
 ${this.emojis.properties} : Propriétés d'instances.
 ${this.emojis.staticMethods}: Méthodes statiques.
 ${this.emojis.staticProperties} : Propriétés statiques.`);
-		}
 		
 		return embed;
 	}
