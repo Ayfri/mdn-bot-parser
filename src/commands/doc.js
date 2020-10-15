@@ -253,6 +253,7 @@ ${this.emojis.return} : Retour en arrière.`);
 				.replace(/<strong>(.*?)<\/strong>/g, '**$1**')
 				.replace(/<code>(\*{0,3})([^*]*?)(\*{0,3})<\/code>/g, '$1`$2`$3')
 				.replace(/<sup>(.*?)<\/sup>/g, (str, result) => toSup(result))
+				.replace(/<ul>\s*(<li>(.*?)<\/li>\s*)+<\/ul>/g, (str) => str.replace(/<\/?ul>\s*/g, '').replace(/<li>(.*?)<\/li>/g, ' • $1'))
 				.replace(/&nbsp;/g, ' ')
 				.replace(/&lt;/g, '<')
 				.replace(/<h3>(.*?)<\/h3>/g, '> **$1**');
