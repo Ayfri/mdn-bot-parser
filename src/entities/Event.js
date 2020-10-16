@@ -1,5 +1,3 @@
-const Logger = require('../utils/Logger.js');
-
 module.exports = class Event {
 	name;
 	once = false;

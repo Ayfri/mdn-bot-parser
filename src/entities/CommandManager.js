@@ -9,7 +9,7 @@ module.exports = class CommandManager {
 	 * @type {Collection<string, Command>}
 	 */
 	static commands = new Collection();
-
+	
 	/**
 	 * Cherche une commande via son nom.
 	 * @param {string} name - Le nom de la commande.
@@ -18,7 +18,7 @@ module.exports = class CommandManager {
 	static findCommand(name) {
 		return CommandManager.commands.find(command => command.name.toLowerCase() === name.toLowerCase() || command.aliases?.includes(name.toLowerCase()));
 	}
-
+	
 	/**
 	 * Charge une commande.
 	 * @param {Command} command - La commande à charger.
@@ -28,7 +28,7 @@ module.exports = class CommandManager {
 		CommandManager.commands.set(command.name, command);
 		Logger.log(`Command '${command.name}' loaded successfully.`);
 	}
-
+	
 	/**
 	 * Charge toutes les commandes dans le dossier en question.
 	 * @param {string} dirName - Le nom du dossier.
@@ -41,14 +41,12 @@ module.exports = class CommandManager {
 		for (const commandFile of commandDir) {
 			if (commandFile.endsWith('.js')) {
 				const command = new (require(`../${path}/${commandFile}`))();
-				if (command) {
-					if (command.category === 'none') command.category = dirName.split(sep).pop();
-					this.loadCommand(command);
-				}
+				if (command.category === 'none') command.category = dirName.split(sep).pop();
+				this.loadCommand(command);
 			} else this.loadCommands(`${dirName}${sep}${commandFile}`);
 		}
 	}
-
+	
 	/**
 	 * Décharge une commande.
 	 * @param {Command} command - La commande à décharger.
