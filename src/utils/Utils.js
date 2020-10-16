@@ -22,7 +22,7 @@ function getKeyByValue(object, value) {
 
 /**
  * Retourne une valeur aléatoire de l'array mis en argument.
- * @param {array} array - Un tableau.
+ * @param {Array} array - Un tableau.
  * @returns {*} - Une des valeurs random.
  */
 function random(array) {

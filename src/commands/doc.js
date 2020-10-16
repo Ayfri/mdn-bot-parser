@@ -11,8 +11,8 @@ const {MessageEmbed, Collection} = require('discord.js');
 
 /**
  * @typedef {object} MDNEmbedKey
- * @property {string} link
- * @property {MDNEmbedType} type
+ * @property {string} link - Le lien.
+ * @property {MDNEmbedType} type - Le type.
  */
 
 module.exports = class DocCommand extends Command {
@@ -31,7 +31,7 @@ module.exports = class DocCommand extends Command {
 			tags: [tags.prefix_command],
 		});
 	}
-
+	
 	/**
 	 * Ajoute l'embed des réactions au message (actuellement une méthode car sinon répétition de code).
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
@@ -40,14 +40,7 @@ module.exports = class DocCommand extends Command {
 	addReactionsField(embed) {
 		embed.addField(
 			'Cliquez sur les réactions pour naviguer entre les catégories :',
-			`
-${this.emojis.clipboard} : Informations principales.
-${this.emojis.moreInfos} : Informations supplémentaires.
-${this.emojis.methods} : Méthodes d'instances.
-${this.emojis.properties} : Propriétés d'instances.
-${this.emojis.staticMethods}: Méthodes statiques.
-${this.emojis.staticProperties} : Propriétés statiques.
-${this.emojis.return} : Retour en arrière.`
+			`\n${this.emojis.clipboard} : Informations principales.\n${this.emojis.moreInfos} : Informations supplémentaires.\n${this.emojis.methods} : Méthodes d'instances.\n${this.emojis.properties} : Propriétés d'instances.\n${this.emojis.staticMethods}: Méthodes statiques.\n${this.emojis.staticProperties} : Propriétés statiques.\n${this.emojis.return} : Retour en arrière.`
 		);
 	}
 
@@ -93,7 +86,7 @@ ${this.emojis.return} : Retour en arrière.`
 		collector.on('collect', async (reaction, user) => {
 			const mdnEmbedKey = {
 				type: 'infos',
-				link: link,
+				link,
 			};
 
 			mdnEmbedKey.type = DocCommand.historic.get(commandMessage.author.id)?.type || Object.values(this.emojis).find(e => e.id === reaction.emoji.id)?.name || mdnEmbedKey.type;
@@ -197,7 +190,7 @@ ${this.emojis.return} : Retour en arrière.`
 		let e = [];
 
 		if (list.tagName === 'DIV') {
-			result.description = list.getElementsByTagName('p')?.item(0)?.innerHTML ?? undefined;
+			result.description = list.getElementsByTagName('p')?.item(0)?.innerHTML ?? null;
 			const dl = Array.from(list.getElementsByTagName('dl')).map(d => this.parseHTMLList(d));
 			Object.assign(result, ...dl);
 			return result;

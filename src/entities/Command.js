@@ -38,7 +38,7 @@ module.exports = class Command {
 	getCommand(name) {
 		return CommandManager.findCommand(name ?? '');
 	}
-
+	
 	/**
 	 * Fonction exécutée quand la commande est exécutée.
 	 * @param {CustomClient} client - Le client.

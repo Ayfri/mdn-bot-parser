@@ -61,6 +61,17 @@ module.exports = class EvalCommand extends Command {
 			return newText;
 		};
 
+		const send = text => {
+			if (log) functionsPassages.push('send');
+			verifyText(text);
+			return channel.send(text);
+		};
+
+		const sendMarkdown = (text, lang) => {
+			if (log) functionsPassages.push('sendMarkdown');
+			return send(`\`\`\`${lang}\n${text}\`\`\``);
+		};
+
 		const sendJS = text => {
 			if (log) functionsPassages.push('sendJS');
 			text = cutText(text);
@@ -77,17 +88,6 @@ module.exports = class EvalCommand extends Command {
 			if (!text.toString() && !text.toString().length) text = text.toString();
 			if (!text.length) return sendJS('EvalError : Cannot send an empty message.');
 			if (text.length > 2048) return sendJS('EvalError : Cannot send much than 2000 characters in one message.');
-		};
-
-		const send = text => {
-			if (log) functionsPassages.push('send');
-			verifyText(text);
-			return channel.send(text);
-		};
-
-		const sendMarkdown = (text, lang) => {
-			if (log) functionsPassages.push('sendMarkdown');
-			return send(`\`\`\`${lang}\n${text}\`\`\``);
 		};
 
 		const sendBig = (text, js = false) => {

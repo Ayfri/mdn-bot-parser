@@ -21,13 +21,13 @@ function addMissingZeros(number, size) {
 /**
  * Formatte le pattern pour pouvoir ajouter des éléments d'une date, un peu comme moments mais ne fonctionne qu'avec :
  *
- *  • Année (yyyy)
- *  • Mois (MM)
- *  • Jours (jj)
- *  • Heures (hh)
- *  • Minutes (mm)
- *  • Secondes (ss)
- *  • Millisecondes (SSSS).
+ * • Année (yyyy)
+ * • Mois (MM)
+ * • Jours (jj)
+ * • Heures (hh)
+ * • Minutes (mm)
+ * • Secondes (ss)
+ * • Millisecondes (SSSS).
  *
  * @example
  * const pattern = "Il est hh heure et mm minutes.";
@@ -77,7 +77,7 @@ function parseRelativeDate(pattern, relativeDate = new Date()) {
  *   value: 18000000 (1000 * 60 * 60 * 5)
  * }
  *
- * @param {String|String[]} args - Texte.
+ * @param {string | string[]} args - Texte.
  * @returns {{type: string, value: number}} - Retourne un objet contenant le type de temps et le nombre de millisecondes.
  */
 function getTime(args) {
