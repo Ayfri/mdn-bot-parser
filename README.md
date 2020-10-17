@@ -8,3 +8,7 @@
 MDN Bot Parser is a Discord French bot (it will be translated) made in Javascript using the `discord.js` library.
 
 Its purpose is to send information about a native classes or a native function from the MDN Documentation.
+
+## Links
+
+Invite it with [this link](https://discord.com/oauth2/authorize?client_id=742373313199866009&scope=bot&permissions=388160).
