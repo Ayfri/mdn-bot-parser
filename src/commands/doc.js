@@ -247,7 +247,7 @@ module.exports = class DocCommand extends Command {
 				.replace(/&lt;/g, '<')
 				.replace(/<h3>(.*?)<\/h3>/g, '> **$1**')
 				.replace(/<div>([^]*?)<\/div>/g, '$1')
-				.replace(/\n{2,}/g, '\n\n')
+				.replace(/(\s*\n){2,}/g, '\n\n')
 				.replace(/\s*```\s*/g, '```');
 		} while (/<(.+?) ((href|classes|id)=".+?")*>.+?<\/(\1)>/m.test(text));
 		
@@ -457,12 +457,14 @@ module.exports = class DocCommand extends Command {
 	 * @returns {MessageEmbed} - L'embed modifié.
 	 */
 	setMoreInfos(embed, infos, link) {
+		console.log(infos);
+		
 		embed.setTitle(`${this.emojis.moreInfos} Informations supplémentaires : `);
 		if (infos.examples) {
 			embed.setURL(link);
 			embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.examples)));
 		}
-		if (infos.lookAlso) embed.addField('Voir aussi : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.lookAlso)));
+		if (infos.lookAlso) embed.addField('Voir aussi : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.lookAlso), 1024));
 		this.addReactionsField(embed);
 		
 		return embed;
