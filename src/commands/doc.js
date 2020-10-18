@@ -436,7 +436,7 @@ module.exports = class DocCommand extends Command {
 	 */
 	setMainInfos(embed, infos, link) {
 		const type = this.typeOfObject(infos.name);
-		const title = `${type === 'function' ? this.emojis.functions + 'Fonction' : type === 'class' ? this.emojis.classes + 'Classe' : this.emojis.properties + 'Constante'} ${infos.name} :`;
+		const title = `${type === 'function' ? `${this.emojis.functions} Fonction` : type === 'class' ? `${this.emojis.classes} Classe` : `${this.emojis.properties} Constante`} ${infos.name} :`;
 		embed.setTitle(title);
 		embed.setURL(link);
 		embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.description)));
