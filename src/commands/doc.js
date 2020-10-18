@@ -296,7 +296,7 @@ module.exports = class DocCommand extends Command {
 	/**
 	 * Retourne les informations du dom en le parsant.
 	 * @param {any} dom - Le DOM.
-	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: *[], examples: string, name: string, staticMethods: {}, lookAlso: *[], syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}} - Les informations.
+	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: *[], examples: string, name: string, staticMethods: {}, lookAlso: "", syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}} - Les informations.
 	 */
 	parseWebsiteInfos(dom) {
 		const infos = this.newInfos();
@@ -427,6 +427,23 @@ module.exports = class DocCommand extends Command {
 
 		return embed;
 	}
+	
+	/**
+	 * Renvoie un string suivant le type d'objet global qui est inscrit en paramètre.
+	 * @param {string} name - Le nom de l'objet global.
+	 * @returns {string} - Le résultat.
+	 */
+	typeOfObject(name) {
+		const constants = {
+			Infinity:   'Infinity',
+			NaN:        'NaN',
+			undefined:  'undefined',
+			null:       'null',
+			globalThis: 'globalThis',
+		}
+		
+		return `${constants[name] ? `${this.emojis.properties} Propriété globale` : name.charAt(0) === name.charAt(0).toUpperCase() ? `${this.emojis.classes} Classe` : `${this.emojis.functions} Fonction`} ${name}`;
+	}
 
 	/**
 	 * Définit les informations de l'embed principal.
@@ -436,7 +453,7 @@ module.exports = class DocCommand extends Command {
 	 * @returns {MessageEmbed} - L'embed modifié.
 	 */
 	setMainInfos(embed, infos, link) {
-		embed.setTitle(`${infos.name.charAt(0) === infos.name.charAt(0).toUpperCase() ? `${this.emojis.classes} Classe` : `${this.emojis.functions} Fonction`} ${infos.name} :`);
+		embed.setTitle(`${this.typeOfObject(infos.name)} :`);
 		embed.setURL(link);
 		embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.description)));
 		if (infos.shortDescription) embed.addField('Description courte : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.shortDescription), 1024));
