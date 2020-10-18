@@ -159,7 +159,7 @@ module.exports = class DocCommand extends Command {
 
 	/**
 	 * Génère de nouvelles informations pour analyser un site MDN.
-	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: [], examples: string, name: string, staticMethods: {}, lookAlso: [], syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}} - Les informations.
+	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: [], examples: string, name: string, staticMethods: {}, lookAlso: '', syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}} - Les informations.
 	 */
 	newInfos() {
 		return {
@@ -167,7 +167,7 @@ module.exports = class DocCommand extends Command {
 			shortDescription: '',
 			examples: '',
 			description: '',
-			lookAlso: [],
+			lookAlso: '',
 			methods: {},
 			name: '',
 			parameters: '',
@@ -223,7 +223,7 @@ module.exports = class DocCommand extends Command {
 	 * @returns {string} - Le texte reformatté.
 	 */
 	parseHTMLTagsToMarkdown(text = '') {
-		if (!text) text = '';
+		if (!text || typeof text !== 'string') text = '';
 
 		do {
 			text = text

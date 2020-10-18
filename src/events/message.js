@@ -54,7 +54,7 @@ module.exports = class MessageEvent extends Event {
 		if (message.author.bot || message.system) return;
 
 		const prefix = this.getPrefixFromMessage() ?? '';
-		this.args = message.content.slice(prefix.length).split(/\s+/g);
+		this.args = message.content.slice(prefix.length).split(/\s+/g).filter(arg => arg);
 
 		if (prefix) {
 			const command = CommandManager.findCommand(this.args[0] ?? '');
