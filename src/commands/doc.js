@@ -24,12 +24,31 @@ const {
  * @property {MDNEmbedType} type - Le type.
  */
 
+/**
+ * @typedef {object} Infos
+ * @property {null} compatibility -
+ * @property {string} description -
+ * @property {string} examples -
+ * @property {string} lookAlso -
+ * @property {object} methods -
+ * @property {string} name -
+ * @property {string} parameters -
+ * @property {object} properties -
+ * @property {string} returnedValue -
+ * @property {string} shortDescription -
+ * @property {Array} specifications -
+ * @property {object} staticMethods -
+ * @property {object} staticProperties -
+ * @property {string} syntax -
+ */
+
 module.exports = class DocCommand extends Command {
 	static domain = 'https://developer.mozilla.org';
 	static logo = 'https://developer.mozilla.org/static/img/favicon32.7f3da72dcea1.png';
 	static cache = new Collection();
 	static historic = new Collection();
 	emojis = {};
+	
 	
 	constructor() {
 		super({
@@ -44,15 +63,25 @@ module.exports = class DocCommand extends Command {
 	/**
 	 * Ajoute l'embed des réactions au message (actuellement une méthode car sinon répétition de code).
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
+	 * @param {Infos} infos
 	 * @returns {void}
 	 */
-	addReactionsField(embed) {
-		embed.addField('Cliquez sur les réactions pour naviguer entre les catégories :', `\n${this.emojis.clipboard} : Informations principales.\n${this.emojis.moreInfos} : Informations supplémentaires.\n${this.emojis.methods} : Méthodes d'instances.\n${this.emojis.properties} : Propriétés d'instances.\n${this.emojis.staticMethods}: Méthodes statiques.\n${this.emojis.staticProperties} : Propriétés statiques.\n${this.emojis.return} : Retour en arrière.`);
+	addReactionsField(embed, infos) {
+		let value = `${this.emojis.clipboard} : Informations principales.\n`;
+		value += `${this.emojis.moreInfos} : Informations supplémentaires.\n`;
+		if (JSON.stringify(infos.methods).slice(1, -1).length > 0) value += `${this.emojis.methods} : Méthodes d'instances.\n`;
+		if (JSON.stringify(infos.properties).slice(1, -1).length > 0) value += `${this.emojis.properties} : Propriétés d'instances.\n`;
+		if (JSON.stringify(infos.staticMethods).slice(1, -1).length > 0) value += `${this.emojis.staticMethods}: Méthodes statiques.\n`;
+		if (JSON.stringify(infos.staticProperties).slice(1, -1).length > 0) value += `${this.emojis.staticProperties} : Propriétés statiques.\n`;
+		value += `${this.emojis.return} : Retour en arrière.`;
+		
+		embed.addField('Cliquez sur les réactions pour naviguer entre les catégories :', value);
+		
 	}
 	
 	/**
 	 * Change l'embed du message par rapport à la clé.
-	 * @param {object} infos - Les informations.
+	 * @param {Infos} infos - Les informations.
 	 * @param {MDNEmbedKey} key - La clé de l'embed.
 	 * @param {Message} message - Le message.
 	 * @returns {Promise<void>} - Rien.
@@ -76,7 +105,7 @@ module.exports = class DocCommand extends Command {
 	 * @param {Message} mainMessage - Main message sent by user.
 	 * @param {module:"discord.js".Client} client - Discord client.
 	 * @param {string} link - The link of the object from documentation.
-	 * @param {object} infos - The informations collected from the website.
+	 * @param {Infos} infos - The informations collected from the website.
 	 * @returns {Promise<void>}
 	 */
 	async createCollector(commandMessage, mainMessage, client, link, infos) {
@@ -134,6 +163,8 @@ module.exports = class DocCommand extends Command {
 				break;
 		}
 		
+		this.addReactionsField(embed, infos);
+		
 		return embed;
 	}
 	
@@ -162,11 +193,11 @@ module.exports = class DocCommand extends Command {
 	
 	/**
 	 * Génère de nouvelles informations pour analyser un site MDN.
-	 * @returns {{methods: {}, description: string, staticProperties: {}, shortDescription: string, specifications: [], examples: string, name: string, staticMethods: {}, lookAlso: '', syntax: string, compatibility: null, parameters: string, returnedValue: string, properties: {}}} - Les informations.
+	 * @returns {Infos} - Les informations.
 	 */
 	newInfos() {
 		return {
-			compatibility:    null, // pas fait encore
+			compatibility:    null, // todo
 			shortDescription: '',
 			examples:         '',
 			description:      '',
@@ -176,7 +207,7 @@ module.exports = class DocCommand extends Command {
 			parameters:       '',
 			properties:       {},
 			returnedValue:    '',
-			specifications:   [], // pas fait encore
+			specifications:   [], // todo
 			staticMethods:    {},
 			staticProperties: {},
 			syntax:           '',
@@ -420,8 +451,6 @@ module.exports = class DocCommand extends Command {
 			}
 			
 			if (object.description) embed.setDescription(this.parseHTMLTagsToMarkdown(object.description));
-			
-			this.addReactionsField(embed);
 		}
 		
 		return embed;
@@ -430,13 +459,15 @@ module.exports = class DocCommand extends Command {
 	/**
 	 * Définit les informations de l'embed principal.
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
-	 * @param {object} infos - Les informations.
+	 * @param {Infos} infos - Les informations.
 	 * @param {string} link - Le lien.
 	 * @returns {MessageEmbed} - L'embed modifié.
 	 */
 	setMainInfos(embed, infos, link) {
 		const type = this.typeOfObject(infos.name);
-		const title = `${type === 'function' ? `${this.emojis.functions} Fonction` : type === 'class' ? `${this.emojis.classes} Classe` : type === 'namespace' ? `${this.emojis.constant} Namespace` : `${this.emojis.constant} Constante`} ${infos.name} :`;
+		const title = `${type === 'function' ?
+		                 `${this.emojis.functions} Fonction` :
+		                 type === 'class' ? `${this.emojis.classes} Classe` : type === 'namespace' ? `${this.emojis.constant} Namespace` : `${this.emojis.constant} Constante`} ${infos.name} :`;
 		embed.setTitle(title);
 		embed.setURL(link);
 		embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.description)));
@@ -444,7 +475,6 @@ module.exports = class DocCommand extends Command {
 		if (infos.syntax) embed.addField('Syntaxe : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.syntax), 1024));
 		if (infos.parameters) embed.addField(`${this.emojis.parameter} Paramètres : `, cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.parameters), 1024));
 		if (infos.returnedValue) embed.addField('Valeur de retour : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.returnedValue), 1024));
-		this.addReactionsField(embed);
 		
 		return embed;
 	}
@@ -452,20 +482,17 @@ module.exports = class DocCommand extends Command {
 	/**
 	 * Sets the informations for the moreInfos embed.
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
-	 * @param {object} infos - Les informations.
+	 * @param {Infos} infos - Les informations.
 	 * @param {string} link - Le lien.
 	 * @returns {MessageEmbed} - L'embed modifié.
 	 */
 	setMoreInfos(embed, infos, link) {
-		console.log(infos);
-		
 		embed.setTitle(`${this.emojis.moreInfos} Informations supplémentaires : `);
 		if (infos.examples) {
 			embed.setURL(link);
 			embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.examples)));
 		}
 		if (infos.lookAlso) embed.addField('Voir aussi : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.lookAlso), 1024));
-		this.addReactionsField(embed);
 		
 		return embed;
 	}
@@ -485,8 +512,8 @@ module.exports = class DocCommand extends Command {
 		};
 		
 		const namespaces = {
-			Intl: 'Intl'
-		}
+			Intl: 'Intl',
+		};
 		
 		return namespaces[name] ? 'namespace' : constants[name] ? 'constant' : name.charAt(0) === name.charAt(0).toUpperCase() ? 'class' : 'function';
 	}
