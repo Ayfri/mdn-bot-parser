@@ -1,18 +1,9 @@
 const Command = require('../entities/Command.js');
-const {
-	categories,
-	tags,
-} = require('../constants.js');
+const {categories, tags} = require('../constants.js');
 const axios = require('axios');
-const {
-	cutTextIfTooLong,
-	toSup,
-} = require('../utils/Utils.js');
+const {cutTextIfTooLong, toSup} = require('../utils/Utils.js');
 const {JSDOM} = require('jsdom');
-const {
-	MessageEmbed,
-	Collection,
-} = require('discord.js');
+const {MessageEmbed, Collection} = require('discord.js');
 
 /**
  * @typedef {'infos'|'moreInfos'|'methods'|'properties'|'staticMethods'|'staticProperties'} MDNEmbedType
@@ -48,18 +39,17 @@ module.exports = class DocCommand extends Command {
 	static cache = new Collection();
 	static historic = new Collection();
 	emojis = {};
-	
-	
+
 	constructor() {
 		super({
-			name:        'doc',
+			name: 'doc',
 			description: 'Donne des informations sur une classe/méthode/propriété.',
-			usage:       'doc String\ndoc Array.prototype.sort\ndoc Math.cos\ndoc Map.prototype.size',
-			category:    categories.development,
-			tags:        [tags.prefix_command],
+			usage: 'doc String\ndoc Array.prototype.sort\ndoc Math.cos\ndoc Map.prototype.size',
+			category: categories.development,
+			tags: [tags.prefix_command],
 		});
 	}
-	
+
 	/**
 	 * Ajoute l'embed des réactions au message (actuellement une méthode car sinon répétition de code).
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
@@ -74,11 +64,10 @@ module.exports = class DocCommand extends Command {
 		if (JSON.stringify(infos.staticMethods).slice(1, -1).length > 0) value += `${this.emojis.staticMethods}: Méthodes statiques.\n`;
 		if (JSON.stringify(infos.staticProperties).slice(1, -1).length > 0) value += `${this.emojis.staticProperties} : Propriétés statiques.\n`;
 		value += `${this.emojis.return} : Retour en arrière.`;
-		
+
 		embed.addField('Cliquez sur les réactions pour naviguer entre les catégories :', value);
-		
 	}
-	
+
 	/**
 	 * Change l'embed du message par rapport à la clé.
 	 * @param {Infos} infos - Les informations.
@@ -89,7 +78,7 @@ module.exports = class DocCommand extends Command {
 	async changeToEmbed(infos, key, message) {
 		const embedKey = DocCommand.cache.findKey(k => k.link === key.link && k.type === key.type);
 		DocCommand.historic.set(message.author.id, key);
-		
+
 		if (embedKey) {
 			await message.edit(DocCommand.cache.get(embedKey));
 		} else {
@@ -98,7 +87,7 @@ module.exports = class DocCommand extends Command {
 			DocCommand.cache.set(key, embed);
 		}
 	}
-	
+
 	/**
 	 * Create the collector.
 	 * @param {Message} commandMessage - Message that executes the command.
@@ -109,24 +98,27 @@ module.exports = class DocCommand extends Command {
 	 * @returns {Promise<void>}
 	 */
 	async createCollector(commandMessage, mainMessage, client, link, infos) {
-		const filter = (reaction, user) => user.id === commandMessage.author.id && (Object.values(this.emojis)
-		                                                                                  .map(e => e.id)
-		                                                                                  .includes(reaction.emoji.id) || Object.values(this.emojis).includes(reaction.emoji.name));
+		const filter = (reaction, user) =>
+			user.id === commandMessage.author.id &&
+			(Object.values(this.emojis)
+				.map(e => e.id)
+				.includes(reaction.emoji.id) ||
+				Object.values(this.emojis).includes(reaction.emoji.name));
 		const collector = mainMessage.createReactionCollector(filter);
 		await commandMessage.reactions.cache.find(r => r.emoji.id === this.emojis.waitEmoji.id).users.remove(client.user.id);
-		
+
 		collector.on('collect', async (reaction, user) => {
 			const mdnEmbedKey = {
 				type: 'infos',
 				link,
 			};
-			
+
 			mdnEmbedKey.type = DocCommand.historic.get(commandMessage.author.id)?.type || Object.values(this.emojis).find(e => e.id === reaction.emoji.id)?.name || mdnEmbedKey.type;
 			mainMessage.reactions.cache.find(r => r.emoji === reaction.emoji).users.remove(user.id);
 			await this.changeToEmbed(infos, mdnEmbedKey, mainMessage);
 		});
 	}
-	
+
 	/**
 	 * Créé un embed en rapport avec la clé.
 	 * @param {MDNEmbedKey} key - La clé.
@@ -136,38 +128,38 @@ module.exports = class DocCommand extends Command {
 	 */
 	async createEmbedFromMDNEmbedKey(key, infos, message) {
 		let embed = new MessageEmbed();
-		
+
 		switch (key.type) {
 			case 'moreInfos':
 				embed = this.setMoreInfos(embed, infos, key.link);
 				break;
-			
+
 			case 'infos':
 				embed = this.setMainInfos(embed, infos, key.link);
 				break;
-			
+
 			case 'methods':
 				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.methods} Méthodes`);
 				break;
-			
+
 			case 'properties':
 				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.properties} Propriétés`);
 				break;
-			
+
 			case 'staticProperties':
 				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.staticMethods} Propriétés statiques`);
 				break;
-			
+
 			case 'staticMethods':
 				this.setEmbedFromFieldsCategory(infos[key.type], embed, key.link, `${this.emojis.staticProperties} Méthodes statiques`);
 				break;
 		}
-		
+
 		this.addReactionsField(embed, infos);
-		
+
 		return embed;
 	}
-	
+
 	/**
 	 * Get the website DOM (or an error).
 	 * @param {string} link - Le lien du site.
@@ -177,43 +169,43 @@ module.exports = class DocCommand extends Command {
 	async getSite(link, message) {
 		let website;
 		let error;
-		
+
 		try {
 			website = await axios.get(link);
 			await message.react(this.emojis.waitEmoji);
 		} catch (e) {
 			error = e;
 		}
-		
+
 		return {
 			website,
 			error,
 		};
 	}
-	
+
 	/**
 	 * Génère de nouvelles informations pour analyser un site MDN.
 	 * @returns {Infos} - Les informations.
 	 */
 	newInfos() {
 		return {
-			compatibility:    null, // todo
+			compatibility: null, // todo
 			shortDescription: '',
-			examples:         '',
-			description:      '',
-			lookAlso:         '',
-			methods:          {},
-			name:             '',
-			parameters:       '',
-			properties:       {},
-			returnedValue:    '',
-			specifications:   [], // todo
-			staticMethods:    {},
+			examples: '',
+			description: '',
+			lookAlso: '',
+			methods: {},
+			name: '',
+			parameters: '',
+			properties: {},
+			returnedValue: '',
+			specifications: [], // todo
+			staticMethods: {},
 			staticProperties: {},
-			syntax:           '',
+			syntax: '',
 		};
 	}
-	
+
 	/**
 	 * Remplace une liste HTML par un objet contenant [nom : valeur].
 	 * @param {HTMLUListElement} list - Le HTML.
@@ -222,35 +214,35 @@ module.exports = class DocCommand extends Command {
 	parseHTMLList(list) {
 		const result = {};
 		let e = [];
-		
+
 		if (list.tagName === 'DIV') {
 			result.description = list.getElementsByTagName('p')?.item(0)?.innerHTML ?? null;
 			const dl = Array.from(list.getElementsByTagName('dl')).map(d => this.parseHTMLList(d));
 			Object.assign(result, ...dl);
 			return result;
 		}
-		
+
 		for (let i = 0; i < list.childElementCount; i++) {
 			const element = list.children[i];
 			switch (element.tagName) {
 				case 'DT':
 					e.push(`${element.textContent} :`);
 					break;
-				
+
 				case 'DD':
 					e.push(element.innerHTML);
 					break;
 			}
-			
+
 			if (e.length === 2) {
 				result[e[0]] = e[1];
 				e = [];
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Remplace les tags HTML de formats pour les renvoyer en markdown Discord.
 	 * @param {string} text - Le HTML.
@@ -258,7 +250,7 @@ module.exports = class DocCommand extends Command {
 	 */
 	parseHTMLTagsToMarkdown(text = '') {
 		if (!text || typeof text !== 'string') text = '';
-		
+
 		do {
 			text = text
 				.replace(/ ?(class|id|rel)="[^"]*?"/g, '')
@@ -281,10 +273,10 @@ module.exports = class DocCommand extends Command {
 				.replace(/(\s*\n){2,}/g, '\n\n')
 				.replace(/\s*```\s*/g, '```');
 		} while (/<(.+?) ((href|classes|id)=".+?")*>.+?<\/(\1)>/m.test(text));
-		
+
 		return text;
 	}
-	
+
 	/**
 	 * Remplace la partie 'Look Also' par du texte.
 	 * @param {HTMLUListElement} list - Le HTML.
@@ -296,10 +288,10 @@ module.exports = class DocCommand extends Command {
 			const element = list.children[i];
 			result += `**•** ${element.innerHTML}\n\n`;
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Remplace une liste de paramètres par du texte.
 	 * @param {HTMLUListElement} list - Le HTML.
@@ -309,24 +301,24 @@ module.exports = class DocCommand extends Command {
 		let result = '';
 		for (let i = 0; i < list.childElementCount; i++) {
 			const element = list.children[i];
-			
+
 			switch (element.tagName) {
 				case 'DT':
 					if (Array.from(element.children).find(e => e.tagName === 'H3')) break;
-					
-					const code = element.innerHTML.replace(/<code>(.+?)<\/code>.+/g, '$1');
-					result += `\n**\`${code}\` (${element.textContent.replace(code, '')})** :`;
+
+					const code = this.parseHTMLTagsToMarkdown(element.innerHTML);
+					result += `\n**\`${code}\`** :`;
 					break;
-				
+
 				case 'DD':
 					result += `\n${element.innerHTML}\n`;
 					break;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Retourne les informations du dom en le parsant.
 	 * @param {any} dom - Le DOM.
@@ -336,31 +328,31 @@ module.exports = class DocCommand extends Command {
 		const infos = this.newInfos();
 		const article = dom.getElementById('wikiArticle');
 		const header = dom.getElementsByClassName('documentation-page-header')[0];
-		
+
 		infos.name = header.getElementsByTagName('h1')[0].textContent;
 		infos.shortDescription = article.getElementsByTagName('p')[0].innerHTML;
-		
+
 		let articleName = '';
 		for (let i = 0; i < article.childElementCount; i++) {
 			let element = article.children[i];
-			
+
 			if (element.tagName === 'DL') {
 				if (element.getElementsByTagName('h3').length > 0) {
 					articleName = element.getElementsByTagName('h3')[0].id;
 				}
 			}
-			
+
 			if (articleName === 'Exemples') {
 				if (element.tagName.match(/h[1-2]/i)) {
 					articleName = element.id;
 				}
 			}
-			
+
 			if (element.tagName.match(/h[1-3]/i) && articleName !== 'Exemples') {
 				articleName = element.id;
 			} else {
 				if (!element.textContent) continue;
-				
+
 				if (articleName === 'Syntaxe') {
 					infos.syntax += `\n${element.outerHTML}`;
 				} else if (articleName === 'Paramètres') {
@@ -384,41 +376,45 @@ module.exports = class DocCommand extends Command {
 				}
 			}
 		}
-		
+
 		return infos;
 	}
-	
+
 	async run(client, message, args) {
 		super.run(client, message, args);
-		
+
 		this.emojis = {
-			classes:          client.emojis.cache.get('742675256996659250'),
-			clipboard:        '📋',
-			constant:         client.emojis.cache.get('742675256963235979'),
-			functions:        client.emojis.cache.get('742678946251931729'),
-			methods:          client.emojis.cache.get('743086936004231168'),
-			moreInfos:        client.emojis.cache.get('742678468759912518'),
-			parameter:        client.emojis.cache.get('742675256686280716'),
-			properties:       client.emojis.cache.get('742675256950521906'),
+			classes: client.emojis.cache.get('742675256996659250'),
+			clipboard: '📋',
+			constant: client.emojis.cache.get('742675256963235979'),
+			functions: client.emojis.cache.get('742678946251931729'),
+			methods: client.emojis.cache.get('743086936004231168'),
+			moreInfos: client.emojis.cache.get('742678468759912518'),
+			parameter: client.emojis.cache.get('742675256686280716'),
+			properties: client.emojis.cache.get('742675256950521906'),
 			staticProperties: client.emojis.cache.get('743087457721122908'),
-			staticMethods:    client.emojis.cache.get('743087456751976508'),
-			return:           '↩',
-			waitEmoji:        client.emojis.cache.get('742682405906677840'),
+			staticMethods: client.emojis.cache.get('743087456751976508'),
+			return: '↩',
+			waitEmoji: client.emojis.cache.get('742682405906677840'),
 		};
-		
+
 		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${args[0]}`;
 		const result = await this.getSite(link, message);
-		
+
 		if (result.error?.message?.includes('Request failed with status code 404')) return await super.send('Pas trouvé. (temporaire)');
 		if (result.error) return;
-		
+
 		const dom = new JSDOM(result.website.data, {runScripts: 'dangerously'}).window.document;
 		const infos = this.parseWebsiteInfos(dom);
-		const mainEmbed = await this.createEmbedFromMDNEmbedKey({
-			type: 'infos',
-			link: link,
-		}, infos, message);
-		
+		const mainEmbed = await this.createEmbedFromMDNEmbedKey(
+			{
+				type: 'infos',
+				link: link,
+			},
+			infos,
+			message
+		);
+
 		const mainMessage = await super.send(mainEmbed);
 		await mainMessage.react(this.emojis.clipboard);
 		await mainMessage.react(this.emojis.moreInfos);
@@ -427,10 +423,10 @@ module.exports = class DocCommand extends Command {
 		if (JSON.stringify(infos.staticProperties).slice(1, -1).length > 0) await mainMessage.react(this.emojis.staticProperties);
 		if (JSON.stringify(infos.staticMethods).slice(1, -1).length > 0) await mainMessage.react(this.emojis.staticMethods);
 		await mainMessage.react(this.emojis.return);
-		
+
 		await this.createCollector(message, mainMessage, client, link, infos);
 	}
-	
+
 	/**
 	 * Transforme une liste de fields dans un objet en un embed propre.
 	 * @param {object} object - La Liste de fields.
@@ -444,18 +440,18 @@ module.exports = class DocCommand extends Command {
 			embed.setTitle(`${name} :`);
 			embed.setURL(link);
 			object = Object.fromEntries(Object.entries(object).slice(0, 25));
-			
+
 			for (const property in object) {
 				if (!object.hasOwnProperty(property) || !object[property] || property === 'description') continue;
 				embed.addField(property, this.parseHTMLTagsToMarkdown(object[property]));
 			}
-			
+
 			if (object.description) embed.setDescription(this.parseHTMLTagsToMarkdown(object.description));
 		}
-		
+
 		return embed;
 	}
-	
+
 	/**
 	 * Définit les informations de l'embed principal.
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
@@ -465,9 +461,15 @@ module.exports = class DocCommand extends Command {
 	 */
 	setMainInfos(embed, infos, link) {
 		const type = this.typeOfObject(infos.name);
-		const title = `${type === 'function' ?
-		                 `${this.emojis.functions} Fonction` :
-		                 type === 'class' ? `${this.emojis.classes} Classe` : type === 'namespace' ? `${this.emojis.constant} Namespace` : `${this.emojis.constant} Constante`} ${infos.name} :`;
+		const title = `${
+			type === 'function'
+				? `${this.emojis.functions} Fonction`
+				: type === 'class'
+				? `${this.emojis.classes} Classe`
+				: type === 'namespace'
+				? `${this.emojis.constant} Namespace`
+				: `${this.emojis.constant} Constante`
+		} ${infos.name} :`;
 		embed.setTitle(title);
 		embed.setURL(link);
 		embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.description)));
@@ -475,10 +477,10 @@ module.exports = class DocCommand extends Command {
 		if (infos.syntax) embed.addField('Syntaxe : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.syntax), 1024));
 		if (infos.parameters) embed.addField(`${this.emojis.parameter} Paramètres : `, cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.parameters), 1024));
 		if (infos.returnedValue) embed.addField('Valeur de retour : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.returnedValue), 1024));
-		
+
 		return embed;
 	}
-	
+
 	/**
 	 * Sets the informations for the moreInfos embed.
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
@@ -493,10 +495,10 @@ module.exports = class DocCommand extends Command {
 			embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.examples)));
 		}
 		if (infos.lookAlso) embed.addField('Voir aussi : ', cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.lookAlso), 1024));
-		
+
 		return embed;
 	}
-	
+
 	/**
 	 * Renvoie un string suivant le type d'objet global qui est inscrit en paramètre.
 	 * @param {string} name - Le nom de l'objet global.
@@ -504,17 +506,17 @@ module.exports = class DocCommand extends Command {
 	 */
 	typeOfObject(name) {
 		const constants = {
-			Infinity:   'Infinity',
-			NaN:        'NaN',
-			undefined:  'undefined',
-			null:       'null',
+			Infinity: 'Infinity',
+			NaN: 'NaN',
+			undefined: 'undefined',
+			null: 'null',
 			globalThis: 'globalThis',
 		};
-		
+
 		const namespaces = {
 			Intl: 'Intl',
 		};
-		
+
 		return namespaces[name] ? 'namespace' : constants[name] ? 'constant' : name.charAt(0) === name.charAt(0).toUpperCase() ? 'class' : 'function';
 	}
 };
