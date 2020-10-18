@@ -2,7 +2,6 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/Ayfri/mdn-bot-parser)
 ![Lines of code](https://img.shields.io/tokei/lines/github/Ayfri/mdn-bot-parser?label=total%20lines%20of%20code)
 
-
 # MDN-Bot-Parser
 
 MDN Bot Parser is a Discord French bot (it will be translated) made in Javascript using the `discord.js` library.

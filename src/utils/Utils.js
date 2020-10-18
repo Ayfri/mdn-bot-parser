@@ -51,9 +51,7 @@ function cutTextIfTooLong(text, length = 2000) {
 function toSup(x) {
 	return x
 		.split('')
-		.map(function (c) {
-			return c in superscripts ? superscripts[c] : c;
-		})
+		.map(c => (c in superscripts ? superscripts[c] : c))
 		.join('');
 }
 

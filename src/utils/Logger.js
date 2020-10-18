@@ -3,7 +3,6 @@ const {logTypes} = require('../constants.js');
 const {getKeyByValue} = require('../utils/Utils.js');
 
 module.exports = class Logger {
-	
 	/**
 	 * Log un message de débug (magenta).
 	 * @param {any} message - Message à log.

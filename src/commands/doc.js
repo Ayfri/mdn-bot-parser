@@ -31,7 +31,7 @@ module.exports = class DocCommand extends Command {
 			tags: [tags.prefix_command],
 		});
 	}
-	
+
 	/**
 	 * Ajoute l'embed des réactions au message (actuellement une méthode car sinon répétition de code).
 	 * @param {module:"discord.js".MessageEmbed} embed - L'embed.
@@ -242,7 +242,10 @@ module.exports = class DocCommand extends Command {
 				.replace(/<ul>\s*(<li>(.*?)<\/li>\s*)+<\/ul>/g, str => str.replace(/<\/?ul>\s*/g, '').replace(/<li>(.*?)<\/li>/g, ' • $1'))
 				.replace(/&nbsp;/g, ' ')
 				.replace(/&lt;/g, '<')
-				.replace(/<h3>(.*?)<\/h3>/g, '> **$1**');
+				.replace(/<h3>(.*?)<\/h3>/g, '> **$1**')
+				.replace(/<div>([^]*?)<\/div>/g, '$1')
+				.replace(/\n{2,}/g, '\n\n')
+				.replace(/\s*```\s*/g, '```');
 		} while (/<(.+?) ((href|classes|id)=".+?")*>.+?<\/(\1)>/m.test(text));
 
 		return text;
