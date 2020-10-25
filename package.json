@@ -26,7 +26,7 @@
 		"tabWidth": 4,
 		"trailingComma": "es5",
 		"useTabs": true
-
+	},
 	"private": true,
 	"scripts": {
 		"start": "node src/main.js",
