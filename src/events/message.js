@@ -6,13 +6,13 @@ const {prefixes} = require('../../assets/jsons/config.json');
 
 module.exports = class MessageEvent extends Event {
 	message;
-
+	
 	constructor() {
 		super({
 			name: 'message',
 		});
 	}
-
+	
 	/**
 	 * Execute la commande.
 	 * @param {Command} command - La commande à exécuter.
@@ -21,7 +21,7 @@ module.exports = class MessageEvent extends Event {
 	async executeCommand(command) {
 		await command.run(this.client, this.message, this.args);
 	}
-
+	
 	/**
 	 * Récupère le préfixe depuis le message.
 	 * @returns {string | null} - Le préfixe trouvé ou null si aucun préfixe trouvé.
@@ -30,17 +30,17 @@ module.exports = class MessageEvent extends Event {
 		let prefix = null;
 		prefixes.push(this.client.user.toString());
 		prefixes.push(`<@!${this.client.user.id}>`);
-
+		
 		for (const possiblePrefix of prefixes) {
 			if (this.message.content.startsWith(possiblePrefix.trim())) prefix = possiblePrefix.trim();
 		}
-
+		
 		prefixes.pop();
 		prefixes.pop();
-
+		
 		return prefix;
 	}
-
+	
 	/**
 	 * Execute l'évent message.
 	 * @param {CustomClient} client - Le client.
@@ -50,35 +50,30 @@ module.exports = class MessageEvent extends Event {
 	async run(client, message) {
 		super.run(client);
 		this.message = message;
-
+		
 		if (message.author.bot || message.system) return;
-
+		
 		const prefix = this.getPrefixFromMessage() ?? '';
 		this.args = message.content
-			.slice(prefix.length)
-			.split(/\s+/g)
-			.filter(arg => arg);
-
+		                   .slice(prefix.length)
+		                   .split(/\s+/g)
+		                   .filter(arg => arg);
+		
 		if (prefix) {
 			const command = CommandManager.findCommand(this.args[0] ?? '');
 			if (message.content.split(/\s+/g)[0] === prefix && !command) {
 				client.commands.filter(command => command.tags.includes(tags.prefix_command)).forEach(command => this.executeCommand(command));
 				return;
 			}
-
+			
 			this.args.shift();
-
+			
 			if (command) {
 				if (command.tags.includes(tags.owner_only)) {
 					if (isOwner(message.author.id)) {
 						this.executeCommand(command);
-						return;
-					}
-
-					return;
-				}
-
-				await this.executeCommand(command);
+					} else await message.channel.send('Non non nooooon <:oui:703398234718208080>');
+				} else await this.executeCommand(command);
 			}
 		}
 	}

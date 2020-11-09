@@ -1,4 +1,5 @@
 const Command = require('../entities/Command.js');
+const {tags} = require('../constants.js');
 const {formatByteSize} = require('../utils/FormatUtils.js');
 const {categories} = require('../constants.js');
 
@@ -10,7 +11,7 @@ module.exports = class EvalCommand extends Command {
 			clientPermissions: [],
 			category: categories.owner,
 			description: '',
-			tags: [],
+			tags: [tags.owner_only],
 			usage: '',
 			userPermissions: [],
 		});

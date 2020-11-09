@@ -1,4 +1,5 @@
 const Command = require('../entities/Command.js');
+const {tags} = require('../constants.js');
 const {categories} = require('../constants.js');
 
 module.exports = class RestartCommand extends Command {
@@ -9,7 +10,7 @@ module.exports = class RestartCommand extends Command {
 			clientPermissions: [],
 			category: categories.owner,
 			description: '',
-			tags: [],
+			tags: [tags.owner_only],
 			usage: '',
 			userPermissions: [],
 		});
