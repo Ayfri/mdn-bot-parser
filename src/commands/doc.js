@@ -132,7 +132,7 @@ module.exports = class DocCommand extends Command {
 	 * @param {string} [failedSearch = ''] - The failed search if there is.
 	 * @returns {Promise<module:"discord.js".MessageEmbed>} - The resulting embed.
 	 */
-	async createDefaultListEmbed(message, failedSearch = '') {
+	async createDefaultListEmbed(message) {
 		const result = await this.getSite(DocCommand.nativeObjectsUrl, message);
 		const dom = new JSDOM(result.website.data, {runScripts: 'dangerously'}).window.document;
 		const article = dom.getElementById('wikiArticle');
@@ -141,7 +141,6 @@ module.exports = class DocCommand extends Command {
 		embed.setTitle('Liste des objets natifs.');
 		embed.setURL(DocCommand.nativeObjectsUrl);
 		embed.setFooter(`Faites doc [Element] pour récupérer des informations sur un élément.`, message.client.user.displayAvatarURL());
-		if (failedSearch.length > 0) embed.setDescription(`Recherche de \`${failedSearch}\` non trouvée, voici la liste des objets natifs disponibles :`);
 		
 		let name = '';
 		let value = '';
@@ -449,7 +448,10 @@ module.exports = class DocCommand extends Command {
 		const result = await this.getSite(link, message);
 		
 		if (!args[0] || result.error?.message?.includes('Request failed with status code 404')) {
-			const embed = await this.createDefaultListEmbed(message, args.join(' '));
+			if (!DocCommand.cache.has(DocCommand.nativeObjectsUrl)) DocCommand.cache.set(DocCommand.nativeObjectsUrl, await this.createDefaultListEmbed(message));
+			const embed = DocCommand.cache.get(DocCommand.nativeObjectsUrl);
+			
+			if (args[0]) embed.setDescription(`Recherche de \`${args[0]}\` non trouvée, voici la liste des objets natifs disponibles :`);
 			if (args[0] === 'eddy') embed.setThumbnail('https://tenor.com/view/thirsty-hamster-blowjob-suck-dick-gif-15709600'); // easter egg hehe
 			return await super.send(embed);
 		}
