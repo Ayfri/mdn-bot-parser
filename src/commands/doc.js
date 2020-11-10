@@ -126,6 +126,12 @@ module.exports = class DocCommand extends Command {
 		});
 	}
 	
+	/**
+	 * Return the list of the default natives objects in JavaScript, list from MDN.
+	 * @param {Message} message - The discord message that executed the command.
+	 * @param {string} [failedSearch = ''] - The failed search if there is.
+	 * @returns {Promise<module:"discord.js".MessageEmbed>} - The resulting embed.
+	 */
 	async createDefaultListEmbed(message, failedSearch = '') {
 		const result = await this.getSite(DocCommand.nativeObjectsUrl, message);
 		const dom = new JSDOM(result.website.data, {runScripts: 'dangerously'}).window.document;
