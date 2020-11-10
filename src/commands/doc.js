@@ -135,7 +135,7 @@ module.exports = class DocCommand extends Command {
 		embed.setTitle('Liste des objets natifs.');
 		embed.setURL(DocCommand.nativeObjectsUrl);
 		embed.setFooter(`Faites doc [Element] pour récupérer des informations sur un élément.`, message.client.user.displayAvatarURL());
-		if(failedSearch.length > 0) embed.setDescription(`Recherche de \`${failedSearch}\` non trouvée, voici la liste des objets natifs disponibles :`);
+		if (failedSearch.length > 0) embed.setDescription(`Recherche de \`${failedSearch}\` non trouvée, voici la liste des objets natifs disponibles :`);
 		
 		let name = '';
 		let value = '';
@@ -439,12 +439,12 @@ module.exports = class DocCommand extends Command {
 			waitEmoji:        client.emojis.cache.get('742682405906677840'),
 		};
 		
-		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${args[0] ?? ''}`;
+		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${args[0]}`;
 		const result = await this.getSite(link, message);
 		
-		if (result.error?.message?.includes('Request failed with status code 404')) {
+		if (!args[0] || result.error?.message?.includes('Request failed with status code 404')) {
 			const embed = await this.createDefaultListEmbed(message, args.join(' '));
-			if(args[0] === 'eddy') embed.setThumbnail('https://tenor.com/view/thirsty-hamster-blowjob-suck-dick-gif-15709600'); // easter egg hehe
+			if (args[0] === 'eddy') embed.setThumbnail('https://tenor.com/view/thirsty-hamster-blowjob-suck-dick-gif-15709600'); // easter egg hehe
 			return await super.send(embed);
 		}
 		if (result.error) return;
