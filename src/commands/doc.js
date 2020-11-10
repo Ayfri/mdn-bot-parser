@@ -441,7 +441,11 @@ module.exports = class DocCommand extends Command {
 		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${args[0]}`;
 		const result = await this.getSite(link, message);
 		
-		if (result.error?.message?.includes('Request failed with status code 404')) return await super.send(await this.createDefaultListEmbed(message));
+		if (result.error?.message?.includes('Request failed with status code 404')) {
+			const embed = await this.createDefaultListEmbed(message);
+			if(args[0] === 'eddy') embed.setThumbnail('https://tenor.com/view/thirsty-hamster-blowjob-suck-dick-gif-15709600'); // easter egg hehe
+			return await super.send(embed);
+		}
 		if (result.error) return;
 		
 		const dom = new JSDOM(result.website.data, {runScripts: 'dangerously'}).window.document;
