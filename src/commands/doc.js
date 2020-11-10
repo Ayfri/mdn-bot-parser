@@ -208,13 +208,13 @@ module.exports = class DocCommand extends Command {
 	
 	/**
 	 * Get the website DOM (or an error).
-	 * @param {string} link - Le lien du site.
-	 * @param {Message} message - Le message.
-	 * @returns {Promise<{website: *, error: *}>} - Le résultat (site ou erreur).
+	 * @param {string} link - The website link.
+	 * @param {Message} message - The message.
+	 * @returns {Promise<{website: string|null, error: Error|null}>} - The result (website or error).
 	 */
 	async getSite(link, message) {
-		let website;
-		let error;
+		let website = null;
+		let error = null;
 		
 		try {
 			website = await axios.get(link);
