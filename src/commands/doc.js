@@ -13,6 +13,7 @@ const {
 	MessageEmbed,
 	Collection,
 } = require('discord.js');
+const path = require('path');
 
 /**
  * @typedef {'infos'|'moreInfos'|'methods'|'properties'|'staticMethods'|'staticProperties'} MDNEmbedType
@@ -443,10 +444,19 @@ module.exports = class DocCommand extends Command {
 			return:           '↩',
 			waitEmoji:        client.emojis.cache.get('742682405906677840'),
 		};
-		const end = args.join(' ').replace('--debug', '').replace(/[\s.]/g, '/');
-		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${end}`;
-		const result = await this.getSite(link, message);
-		if (message.content.includes('--debug')) console.log(link);
+		const end = args.join(' ')
+		                .replace('--debug', '')
+		                .replace(/\b\s+|\.\b/g, '/')
+		                .replace('/prototype/', '/');
+		const link = new URL(`${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${end}`);
+		const result = await this.getSite(link.href, message);
+		
+		if (message.content.includes('--debug')) console.log({
+			link,
+			end,
+			args: args
+		});
+		
 		if (!args[0] || result.error?.message?.includes('Request failed with status code 404')) {
 			if (!DocCommand.cache.has(DocCommand.nativeObjectsUrl)) DocCommand.cache.set(DocCommand.nativeObjectsUrl, await this.createDefaultListEmbed(message));
 			const embed = DocCommand.cache.get(DocCommand.nativeObjectsUrl);
@@ -461,7 +471,7 @@ module.exports = class DocCommand extends Command {
 		const infos = this.parseWebsiteInfos(dom);
 		const mainEmbed = await this.createEmbedFromMDNEmbedKey({
 			type: 'infos',
-			link: link,
+			link: link.href,
 		}, infos, message);
 		
 		const mainMessage = await super.send(mainEmbed);
@@ -473,7 +483,7 @@ module.exports = class DocCommand extends Command {
 		if (JSON.stringify(infos.staticMethods).slice(1, -1).length > 0) await mainMessage.react(this.emojis.staticMethods);
 		await mainMessage.react(this.emojis.return);
 		
-		await this.createCollector(message, mainMessage, client, link, infos);
+		await this.createCollector(message, mainMessage, client, link.href, infos);
 	}
 	
 	/**
