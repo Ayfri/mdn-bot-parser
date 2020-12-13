@@ -443,8 +443,8 @@ module.exports = class DocCommand extends Command {
 			return:           '↩',
 			waitEmoji:        client.emojis.cache.get('742682405906677840'),
 		};
-		
-		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${args[0]}`;
+		const end = args.join(' ').replace('--debug', '').replace(/[\s.]/g, '/');
+		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${end}`;
 		const result = await this.getSite(link, message);
 		
 		if (!args[0] || result.error?.message?.includes('Request failed with status code 404')) {
