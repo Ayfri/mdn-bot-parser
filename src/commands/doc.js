@@ -446,7 +446,7 @@ module.exports = class DocCommand extends Command {
 		const end = args.join(' ').replace('--debug', '').replace(/[\s.]/g, '/');
 		const link = `${DocCommand.domain}/fr/docs/Web/JavaScript/Reference/Objets_globaux/${end}`;
 		const result = await this.getSite(link, message);
-		
+		if (message.content.includes('--debug')) console.log(link);
 		if (!args[0] || result.error?.message?.includes('Request failed with status code 404')) {
 			if (!DocCommand.cache.has(DocCommand.nativeObjectsUrl)) DocCommand.cache.set(DocCommand.nativeObjectsUrl, await this.createDefaultListEmbed(message));
 			const embed = DocCommand.cache.get(DocCommand.nativeObjectsUrl);
