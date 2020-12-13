@@ -375,6 +375,7 @@ module.exports = class DocCommand extends Command {
 		const infos = this.newInfos();
 		const article = dom.getElementById('wikiArticle');
 		const header = dom.getElementsByClassName('documentation-page-header')[0];
+		if (!header) return infos;
 		
 		infos.name = header.getElementsByTagName('h1')[0].textContent;
 		infos.shortDescription = article.getElementsByTagName('p')[0].innerHTML;
@@ -454,7 +455,7 @@ module.exports = class DocCommand extends Command {
 		if (message.content.includes('--debug')) console.log({
 			link,
 			end,
-			args: args
+			args: args,
 		});
 		
 		if (!args[0] || result.error?.message?.includes('Request failed with status code 404')) {
@@ -469,6 +470,8 @@ module.exports = class DocCommand extends Command {
 		
 		const dom = new JSDOM(result.website.data, {runScripts: 'dangerously'}).window.document;
 		const infos = this.parseWebsiteInfos(dom);
+		if (JSON.stringify(infos) === JSON.stringify(this.newInfos())) return await super.send(await this.createDefaultListEmbed(message));
+		
 		const mainEmbed = await this.createEmbedFromMDNEmbedKey({
 			type: 'infos',
 			link: link.href,
