@@ -523,9 +523,22 @@ module.exports = class DocCommand extends Command {
 	 */
 	setMainInfos(embed, infos, link) {
 		const type = this.typeOfObject(infos.name);
+		console.log(type);
 		const title = `${type === 'function' ?
 		                 `${this.emojis.functions} Fonction` :
-		                 type === 'class' ? `${this.emojis.classes} Classe` : type === 'namespace' ? `${this.emojis.constant} Namespace` : `${this.emojis.constant} Constante`} ${infos.name} :`;
+		                 type === 'class' ?
+		                 `${this.emojis.classes} Classe` :
+		                 type === 'namespace' ?
+		                 `${this.emojis.constant} Namespace` :
+		                 type === 'method' ?
+		                 `${this.emojis.methods} Méthode` :
+		                 type === 'property' ?
+		                 `${this.emojis.properties} Propriété` :
+		                 type === 'static method' ?
+		                 `${this.emojis.staticMethods} Méthode statique` :
+		                 type === 'static property' ?
+		                 `${this.emojis.staticProperties} Propriété statique` :
+		                 `${this.emojis.constant} Constante`} ${infos.name} :`;
 		embed.setTitle(title);
 		embed.setURL(link);
 		embed.setDescription(cutTextIfTooLong(this.parseHTMLTagsToMarkdown(infos.description)));
@@ -573,6 +586,20 @@ module.exports = class DocCommand extends Command {
 			Intl: 'Intl',
 		};
 		
-		return namespaces[name] ? 'namespace' : constants[name] ? 'constant' : name.charAt(0) === name.charAt(0).toUpperCase() ? 'class' : 'function';
+		return constants[name] ?
+		       'constant' :
+		       namespaces[name] ?
+		       'namespace' :
+		       name.match(/\.prototype\..*\(\)$/g) ?
+		       'method' :
+		       name.match(/\.prototype\..*$/g) ?
+		       'property' :
+		       name.match(/^.*\..*\(\)$/g) ?
+		       'static method' :
+		       name.match(/^.*\..*$/g) ?
+		       'static property' :
+		       name.charAt(0) === name.charAt(0).toUpperCase() ?
+		       'class' :
+		       'function';
 	}
 };
